@@ -1,13 +1,14 @@
 const { test, expect } = require('@playwright/test');
 const LoginPage = require('../pages/LoginPage');
 const SideBar = require('../pages/SideBar');
+const userData = require('../testdata/user.json');
 
 test('Valid Login Test', async ({ page }) => {
     const login = new LoginPage(page);
     const sidebar = new SideBar(page);
 
     await login.goto();
-    await login.login('superadmin@shopbox.com', 'Admin@123');
+    await login.login(userData.username, userData.password);
 
     await expect(page).toHaveURL(/dashboard/);
     
@@ -20,7 +21,7 @@ test('Valid Login Test', async ({ page }) => {
     await sidebar.clickReports();
     await sidebar.clickSettings();
     
-
+    await sidebar.clickDashboard();
     
     
 });
