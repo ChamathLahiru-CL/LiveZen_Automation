@@ -1,11 +1,14 @@
 const { test, expect } = require('@playwright/test');
 const LoginPage = require('../pages/LoginPage');
 const SideBar = require('../pages/SideBar');
+const TopBar = require('../pages/TopBar');
 const userData = require('../testdata/user.json');
+
 
 test('Valid Login Test', async ({ page }) => {
     const login = new LoginPage(page);
     const sidebar = new SideBar(page);
+    const topbar = new TopBar(page);
 
     await login.goto();
     await login.login(userData.username, userData.password);
@@ -22,7 +25,19 @@ test('Valid Login Test', async ({ page }) => {
     await sidebar.clickSettings();
     
     await sidebar.clickDashboard();
+
+    await topbar.clickCollapseButton();
+    // await topbar.clickSearchButton();
+    await topbar.clickLanguageChangeButton();
+    await topbar.clickNotificationButton(); 
     
+    await topbar.clickSettingButton();
+    await topbar.clickCloseSettingButton();
+
+    await topbar.clickProfileButton();
+    await topbar.clickLogoutButton();
+
     
+
 });
 
