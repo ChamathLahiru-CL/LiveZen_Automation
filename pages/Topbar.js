@@ -22,6 +22,8 @@ class Topbar {
         this.searchButton = page.locator("//div[2]//button[2]//*[name()='svg']");
         
         this.profileButton = page.locator("//div[contains(@class,'text-base font-medium')]");
+        this.myProfileButton = page.locator("body > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div:nth-child(5) > div:nth-child(2) > div:nth-child(2) > button:nth-child(1)");
+        this.recentActivityButton = page.locator("(//button[contains(@class,'w-full flex items-center space-x-3 rtl:space-x-reverse px-4 py-2 text-left')])[2]");
         this.logoutButton = page.locator("(//span[normalize-space()='Sign Out'])[1]");
 
         this.settingButton = page.locator("body > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(2) > button:nth-child(4)");
@@ -86,6 +88,7 @@ class Topbar {
     }
 
     // Notification functionality
+
     async seeAllNotifications() {
         await this.seeAllNotificationsButton.click();
     }
@@ -110,6 +113,18 @@ class Topbar {
         await this.directionToggle.click();
         await this.closeSettingButton.click();
     }    
+
+    // Profile functionality
+
+    async clickMyProfile() {
+        await this.profileButton.click();
+        await this.myProfileButton.click();
+        await this.recentActivityButton.click();
+        await this.profileButton.click();
+
+        await this.profileButton.click();
+        await this.logoutButton.click();
+    }
 }
 
 module.exports = Topbar;

@@ -59,6 +59,8 @@ test('Valid Login Test', async ({ page }) => {
 
 // });
 
+
+// Notification functionality checking
 test("Check the notifications", async ({ page }) => {
     const login = new LoginPage(page);
     const topbar = new TopBar(page);
@@ -92,3 +94,19 @@ test("Check the settings functionality", async ({ page }) => {
     await topbar.clickDirectionToggle();
 
 });
+
+// Profile functionality checking
+test("Check the profile functionality", async ({ page }) => {
+
+    const login = new LoginPage(page);
+    const topbar = new TopBar(page);
+
+    await login.goto();
+
+    await login.login(userData.username, userData.password);
+
+    await expect(page).toHaveURL(/dashboard/);
+
+    await topbar.clickMyProfile();
+});
+    
