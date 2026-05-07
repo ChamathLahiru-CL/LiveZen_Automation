@@ -29,3 +29,20 @@ test('Check the Canceled Quotations', async ({ loggedIn, page, quotationsPage })
     await expect(page).toHaveURL(/quotations/);
     await quotationsPage.cancelQuotation();
 });
+
+test('Add New Quotation', async ({ loggedIn, page, quotationsPage }) => {
+    await quotationsPage.navigateToQuotations();
+    await expect(page).toHaveURL(/quotations/);
+    await quotationsPage.addNewQuotation({
+        reference: 'REF-2026-001',
+        biller: 'Test Biller',
+        customer: 'QA intern',
+        warehouse: 'Main Warehouse',
+        customerTax: 'Zero VAT (0%)',
+        discountType: 'After Tax',
+        quotationStatus: 'Sent',
+        product: '24 Inch Monitor 55',
+        quotationNote: 'Test Quotation Note',
+        staffNote: 'Test Staff Note'
+    }); 
+});
