@@ -18,6 +18,7 @@ export default defineConfig({
     actionTimeout: 15000,
 
     launchOptions: {
+      args: ['--start-maximized'],
       slowMo: 1000
     }
 
