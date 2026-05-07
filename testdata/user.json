@@ -18,5 +18,17 @@
   "emptyPassword": {
     "username": "superadmin@shopbox.com",
     "password": ""
+  },
+  "quotationData": {
+    "reference": "REF-2026-002",
+    "biller": "Test User",
+    "customer": "QA intern",
+    "warehouse": "Main Warehouse",
+    "customerTax": "Zero VAT (0%)",
+    "discountType": "After Tax",
+    "quotationStatus": "Sent",
+    "product": "24 Inch Monitor 55",
+    "quotationNote": "Test Quotation Note",
+    "staffNote": "Test Staff Note"
   }
 }

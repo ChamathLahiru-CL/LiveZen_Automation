@@ -33,16 +33,5 @@ test('Check the Canceled Quotations', async ({ loggedIn, page, quotationsPage })
 test('Add New Quotation', async ({ loggedIn, page, quotationsPage }) => {
     await quotationsPage.navigateToQuotations();
     await expect(page).toHaveURL(/quotations/);
-    await quotationsPage.addNewQuotation({
-        reference: 'REF-2026-001',
-        biller: 'Test User',
-        customer: 'QA intern',
-        warehouse: 'Main Warehouse',
-        customerTax: 'Zero VAT (0%)',
-        discountType: 'After Tax',
-        quotationStatus: 'Sent',
-        product: '24 Inch Monitor 55',
-        quotationNote: 'Test Quotation Note',
-        staffNote: 'Test Staff Note'
-    }); 
+    await quotationsPage.addNewQuotation(userData.quotationData);
 }); 
