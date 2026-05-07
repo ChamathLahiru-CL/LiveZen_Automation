@@ -10,6 +10,7 @@ export default class QuotationsPage {
     readonly addNewQuotationButton: Locator;
     readonly addreferenceInput: Locator;
     readonly addbillerInput: Locator
+    readonly searchBillerInput: Locator;
     readonly addcustomerInput: Locator;
     readonly addwarehouseInput: Locator
     readonly addcustomerTaxInput: Locator;
@@ -19,6 +20,7 @@ export default class QuotationsPage {
     readonly addquotationNoteInput: Locator;
     readonly addstaffNoteInput: Locator;
     readonly submitQuotation: Locator;
+    
 
 
     constructor(page: Page) {
@@ -30,9 +32,14 @@ export default class QuotationsPage {
         this.sentQuotationsTab = page.locator("div[class='flex flex-col flex-1 min-w-0 '] div div:nth-child(1) div:nth-child(1) div:nth-child(1) div:nth-child(1) button:nth-child(2)");
         this.completeQuotationsTab = page.locator("body > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > main:nth-child(2) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > button:nth-child(3)");
         this.cancelQuotationsTab = page.locator("body > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > main:nth-child(2) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > button:nth-child(4)");
+        
         this.addNewQuotationButton = page.locator("//button[normalize-space()='Add Quotation']");
+        
         this.addreferenceInput = page.locator("//input[@id='referenceNo']");
+
         this.addbillerInput = page.locator("//button[@id='biller']");
+        this.searchBillerInput = page.locator("//input[@placeholder='Search options...']");
+
         this.addcustomerInput = page.locator("//button[@id='customer']");
         this.addwarehouseInput = page.locator("//button[@id='warehouse']");
         this.addcustomerTaxInput = page.locator("//button[@id='customerTax']");
@@ -41,7 +48,7 @@ export default class QuotationsPage {
         this.addproductInput = page.locator("//input[contains(@placeholder,'Search product')]");
         this.addquotationNoteInput = page.locator("//textarea[@id='quotationNote']");
         this.addstaffNoteInput = page.locator("//textarea[@id='staffNote']");
-        this.submitQuotation = page.locator("//main[@class='flex-1 p-4']//button[2]");
+        this.submitQuotation = page.locator("body > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > main:nth-child(2) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > button:nth-child(2)");
     }
 
     async navigateToQuotations() {
@@ -69,7 +76,7 @@ export default class QuotationsPage {
         const dropdownOption = this.page.getByText(optionText, { exact: true });
 
     // If searchable input exists
-        const searchInput = this.page.locator("//input[contains(@placeholder,'Search')]");
+        const searchInput = this.page.locator("input[placeholder='Search options...']");
         if (await searchInput.isVisible()) {
             await searchInput.fill(optionText);
         }
@@ -100,7 +107,7 @@ export default class QuotationsPage {
         await this.addNewQuotationButton.click();
 
         await this.addreferenceInput.fill(data.reference);
-
+        // await this.addbillerInput.click();
         await this.selectFromDropdown(this.addbillerInput, data.biller);
         await this.selectFromDropdown(this.addcustomerInput, data.customer);
         await this.selectFromDropdown(this.addwarehouseInput, data.warehouse);
@@ -111,8 +118,6 @@ export default class QuotationsPage {
 
         await this.addquotationNoteInput.fill(data.quotationNote);
         await this.addstaffNoteInput.fill(data.staffNote);
-
-        await this.submitQuotation
+        await this.submitQuotation.click();
     }
-) {
 }

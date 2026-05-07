@@ -35,7 +35,7 @@ test('Add New Quotation', async ({ loggedIn, page, quotationsPage }) => {
     await expect(page).toHaveURL(/quotations/);
     await quotationsPage.addNewQuotation({
         reference: 'REF-2026-001',
-        biller: 'Test Biller',
+        biller: 'Test User',
         customer: 'QA intern',
         warehouse: 'Main Warehouse',
         customerTax: 'Zero VAT (0%)',
@@ -45,4 +45,4 @@ test('Add New Quotation', async ({ loggedIn, page, quotationsPage }) => {
         quotationNote: 'Test Quotation Note',
         staffNote: 'Test Staff Note'
     }); 
-});
+}); 
