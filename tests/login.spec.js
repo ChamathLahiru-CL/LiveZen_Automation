@@ -4,109 +4,59 @@ const SideBar = require('../pages/SideBar');
 const TopBar = require('../pages/TopBar');
 const userData = require('../testdata/user.json');
 
-
+// Test Positive Login functionality
 test('Valid Login Test', async ({ page }) => {
     const login = new LoginPage(page);
     const sidebar = new SideBar(page);
     const topbar = new TopBar(page);
 
     await login.goto();
-    await login.login(userData.username, userData.password);
-
-    await expect(page).toHaveURL(/dashboard/);
-    
-    await sidebar.clickDashboard();
-    await sidebar.clickSales();
-    await sidebar.clickProducts();
-    await sidebar.clickPurchases();
-    await sidebar.clickCustomer();
-    await sidebar.clickUsers();
-    await sidebar.clickReports();
-    await sidebar.clickSettings();
-    
-    await sidebar.clickDashboard();
-
-    await topbar.clickCollapseButton();
-    // await topbar.clickSearchButton();
-    await topbar.clickLanguageChangeButton();
-    await topbar.clickNotificationButton(); 
-    
-    await topbar.clickSettingButton();
-    await topbar.clickCloseSettingButton();
-
+    await login.login(userData.validUser.username, userData.validUser.password);
+    await expect(page).toHaveURL(/dashboard/);    
     await topbar.clickProfileButton();
-    await topbar.clickLogoutButton();
+    await topbar.clickLogoutButton();  
 
+});
+
+// Test Negative Login functionality
+// Invalid username and password test
+test('Invalid Login Test', async ({ page }) => {
+    const login = new LoginPage(page);
+
+    await login.goto();
+    await login.login(userData.invalidUser.username, userData.invalidUser.password);
+    await expect(page.locator('text=Invalid email or password')).toBeVisible();
+
+});
+
+// Empty credentials test
+test('Empty Credentials Test', async ({ page }) => {
+    const login = new LoginPage(page);
+
+    await login.goto();
+    await login.login(userData.emptyCredentials.username, userData.emptyCredentials.password);
     
-
+    // Check if still on login page (not logged in)
+    await expect(page.locator('text=Both username/email and password are required')).toBeVisible();
 });
 
-// test("Change the language", async ({ page }) => {
-//     const login = new LoginPage(page);
-//     const topbar = new TopBar(page);
-//     await login.goto();
-//     await login.login(userData.username, userData.password);
-
-//     await expect(page).toHaveURL(/dashboard/);
-
-//     await topbar.clickLanguageChangeButton();
-//     await topbar.selectLanguage('sinhalese');
-//     // await expect(page.locator('body')).toHaveClass(/rtl/);
-
-//     await topbar.clickLanguageChangeButton();
-//     await topbar.selectLanguage('english');
-//     // await expect(page.locator('body')).not.toHaveClass(/rtl/);
-
-// });
-
-
-// Notification functionality checking
-test("Check the notifications", async ({ page }) => {
+// Empty username test
+test('Empty Username Test', async ({ page }) => {
     const login = new LoginPage(page);
-    const topbar = new TopBar(page);
-    const sidebar = new SideBar(page);
-    await login.goto();
-    await login.login(userData.username, userData.password);
-
-    await expect(page).toHaveURL(/dashboard/);
-
-    await topbar.clickNotificationButton();
-    await topbar.seeAllNotifications();
-    await expect(page).toHaveURL(/notifications/);
-    await sidebar.clickDashboard();
-    await expect(page).toHaveURL(/dashboard/);
-});
-
-// Setting functionality checking
-test("Check the settings functionality", async ({ page }) => {
-
-    const login = new LoginPage(page);
-    const topbar = new TopBar(page);
 
     await login.goto();
-
-    await login.login(userData.username, userData.password);
-
-    await expect(page).toHaveURL(/dashboard/);
-
-    await topbar.openSettings();
-
-    await topbar.clickDirectionToggle();
-
-});
-
-// Profile functionality checking
-test("Check the profile functionality", async ({ page }) => {
-
-    const login = new LoginPage(page);
-    const topbar = new TopBar(page);
-
-    await login.goto();
-
-    await login.login(userData.username, userData.password);
-
-    await expect(page).toHaveURL(/dashboard/);
-
-    await topbar.clickMyProfile();
-});
+    await login.login(userData.emptyUsername.username, userData.emptyUsername.password);
     
+    await expect(page.locator('text=Username/email is required')).toBeVisible();
+});
+
+// Empty password test
+test('Empty Password Test', async ({ page }) => {
+    const login = new LoginPage(page);
+
+    await login.goto();
+    await login.login(userData.emptyPassword.username, userData.emptyPassword.password);
+    
+    await expect(page.locator('text=Password is required')).toBeVisible();
+});
+

@@ -1,5 +1,22 @@
 {
-  "username": "superadmin@shopbox.com",
-  "password": "Admin@123",
-  "contactname": "Test User One"
+  "validUser": {
+    "username": "superadmin@shopbox.com",
+    "password": "Admin@123"
+  },
+  "invalidUser": {
+    "username": "invalid@example.com",
+    "password": "WrongPassword123"
+  },
+  "emptyCredentials": {
+    "username": "",
+    "password": ""
+  },
+  "emptyUsername": {
+    "username": "",
+    "password": "Admin@123"
+  },
+  "emptyPassword": {
+    "username": "superadmin@shopbox.com",
+    "password": ""
+  }
 }
