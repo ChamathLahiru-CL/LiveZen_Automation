@@ -43,6 +43,8 @@ export default class SalesOrdersPage {
     readonly staffNoteinput: Locator;
     readonly nextButton: Locator;
     readonly resetButton: Locator;
+    readonly discountTypeDropdown: Locator;
+    readonly discountTypeSearchInput: Locator;
 
 
 
@@ -71,8 +73,10 @@ export default class SalesOrdersPage {
         this.orderTypeInput = page.locator("//input[@placeholder='Search options...']");
         this.customerTaxInput = page.locator("//button[@id='customerTax']");
         this.customerTaxSearchInput = page.locator("//input[@placeholder='Search options...']");
+        this.discountTypeDropdown = page.locator("//button[@id='discountType']");
+        this.discountTypeSearchInput = page.locator("//input[@placeholder='Search options...']");
         this.productionSearchInput = page.locator("//input[@placeholder='Search product']");
-        this.salesStatusDropdown = page.locator("//button[@id='salesStatus']");
+        this.salesStatusDropdown = page.locator("//button[@id='saleStatus']");
         this.salesStatusSearchInput = page.locator("//input[@placeholder='Search options...']");
         this.paymentStatusDropdown = page.locator("//button[@id='paymentStatus']");
         this.paymentStatusSearchInput = page.locator("//input[@placeholder='Search options...']");
@@ -103,17 +107,23 @@ export default class SalesOrdersPage {
         await this.salesOrdersSubMenu.click();
     }
 
-    async addProduct(productName: string) {
-        await this.productionSearchInput.fill(productName);
-        const optionByRole = this.page.getByRole('option', { name: productName }).first();
-        if (await optionByRole.isVisible()) {
-            await optionByRole.click();
-            return;
+    async selectFromDropdown(dropdown: Locator, optionText: string) {
+        await dropdown.click();
+
+        const dropdownOption = this.page.getByText(optionText, { exact: true });
+        const searchInput = this.page.locator("input[placeholder='Search options...']");
+
+        if (await searchInput.isVisible()) {
+            await searchInput.fill(optionText);
         }
 
-        const optionByText = this.page.getByText(productName, { exact: true }).first();
-        await optionByText.waitFor({ state: 'visible' });
-        await optionByText.click();
+        await dropdownOption.scrollIntoViewIfNeeded();
+        await dropdownOption.click();
+    }
+
+    async addProduct(productName: string) {
+        await this.productionSearchInput.fill(productName);
+        await this.page.getByText(productName, { exact: true }).click();
     }
 
     async createNewSalesOrder(data:{
@@ -133,28 +143,15 @@ export default class SalesOrdersPage {
         await this.newAddButton.click();
         await this.addSalesOrderButton.click();
         await this.addReferenceInput.fill(data.reference);
-        await this.billerInput.click();
-        await this.billerSearchInput.fill(data.biller);
-        await this.billerSearchInput.press('Enter');
-        await this.customerInput.click();
-        await this.customerSearchInput.fill(data.customer);
-        await this.customerSearchInput.press('Enter');
-        await this.warehouseInput.click();
-        await this.warehouseSearchInput.fill(data.warehouse);
-        await this.warehouseSearchInput.press('Enter');
-        await this.orderTypeDropdown.click();
-        await this.orderTypeInput.fill(data.orderType);
-        await this.orderTypeInput.press('Enter');
-        await this.customerTaxInput.click();
-        await this.customerTaxSearchInput.fill(data.customerTax);
-        await this.customerTaxSearchInput.press('Enter');
+        await this.selectFromDropdown(this.billerInput, data.biller);
+        await this.selectFromDropdown(this.customerInput, data.customer);
+        await this.selectFromDropdown(this.warehouseInput, data.warehouse);
+        await this.selectFromDropdown(this.orderTypeDropdown, data.orderType);
+        await this.selectFromDropdown(this.customerTaxInput, data.customerTax);
+        await this.selectFromDropdown(this.discountTypeDropdown, data.discountType);
         await this.addProduct(data.product);
-        await this.salesStatusDropdown.click();
-        await this.salesStatusSearchInput.fill(data.salesStatus);
-        await this.salesStatusSearchInput.press('Enter');
-        await this.paymentStatusDropdown.click();
-        await this.paymentStatusSearchInput.fill(data.paymentStatus);
-        await this.paymentStatusSearchInput.press('Enter');
+        await this.selectFromDropdown(this.salesStatusDropdown, data.salesStatus);
+        await this.selectFromDropdown(this.paymentStatusDropdown, data.paymentStatus);
         await this.salesNoteInput.fill(data.salesNote);
         await this.staffNoteinput.fill(data.staffNote);
         await this.nextButton.click();

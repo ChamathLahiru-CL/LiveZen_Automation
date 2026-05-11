@@ -11,14 +11,16 @@ type Fixtures = {
   sidebar: SideBar;
   topbar: Topbar;
   quotationsPage: QuotationsPage;
-  loggedIn: void;
   salesOrdersPage: SalesOrdersPage;
+  loggedIn: void;
 };
 
 export const test = base.extend<Fixtures>({
   loginPage: async ({ page }, use) => {
     await use(new LoginPage(page));
   },
+
+
   sidebar: async ({ page }, use) => {
     await use(new SideBar(page));
   },
@@ -28,14 +30,14 @@ export const test = base.extend<Fixtures>({
   quotationsPage: async ({ page }, use) => {
     await use(new QuotationsPage(page));
   },
+  salesOrdersPage: async ({ page }, use) => {
+    await use(new SalesOrdersPage(page));
+  },
   loggedIn: async ({ loginPage, page }, use) => {
     await loginPage.goto();
     await loginPage.login(userData.validUser.username, userData.validUser.password);
     await expect(page).toHaveURL(/dashboard/);
     await use();
-  },
-  salesOrdersPage: async ({ page }, use) => {
-    await use(new SalesOrdersPage(page));
   }
 });
 

@@ -21,7 +21,7 @@ export default defineConfig({
 
     launchOptions: {
       args: ['--start-maximized'],
-      slowMo: 1000
+      slowMo: 900
     }
 
   },
