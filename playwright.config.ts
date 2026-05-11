@@ -7,6 +7,8 @@ export default defineConfig({
   workers: 1,
 
   use: {
+    channel: 'msedge',
+    acceptDownloads: true,
 
     headless: false,
 

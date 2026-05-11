@@ -30,5 +30,20 @@
     "product": "24 Inch Monitor 55",
     "quotationNote": "Test Quotation Note",
     "staffNote": "Test Staff Note"
+  },
+  "salesOrderData": {
+    "reference": "SO-2026-001",
+    "biller": "Test User",
+    "customer": "QA intern",
+    "warehouse": "Main Warehouse",
+    "orderType": "Standard Order",
+    "customerTax": "Zero VAT (0%)",
+    "discountType": "After Tax",
+    
+    "product": "iPhone 15 Pro",
+    "salesStatus": "Pending",
+    "paymentStatus": "Unpaid",
+    "salesNote": "Test Sales Note",
+    "staffNote": "Test Staff Note"
   }
 }
