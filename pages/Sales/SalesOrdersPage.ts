@@ -45,6 +45,13 @@ export default class SalesOrdersPage {
     readonly resetButton: Locator;
     readonly discountTypeDropdown: Locator;
     readonly discountTypeSearchInput: Locator;
+    readonly totalAmountCell: Locator;
+    readonly amount: Locator;
+    readonly paymentmode: Locator;
+    readonly paymentModeSearchInput: Locator;
+    readonly transactionID: Locator;
+    readonly notePad: Locator;
+    readonly savebutton: Locator;
 
 
 
@@ -75,6 +82,7 @@ export default class SalesOrdersPage {
         this.customerTaxSearchInput = page.locator("//input[@placeholder='Search options...']");
         this.discountTypeDropdown = page.locator("//button[@id='discountType']");
         this.discountTypeSearchInput = page.locator("//input[@placeholder='Search options...']");
+        this.totalAmountCell = page.locator("td.font-medium.text-right.text-gray-600.dark\\:text-gray-400.pl-4.pr-2.py-4.whitespace-nowrap");
         this.productionSearchInput = page.locator("//input[@placeholder='Search product']");
         this.salesStatusDropdown = page.locator("//button[@id='saleStatus']");
         this.salesStatusSearchInput = page.locator("//input[@placeholder='Search options...']");
@@ -84,7 +92,12 @@ export default class SalesOrdersPage {
         this.staffNoteinput = page.locator("//textarea[@id='staffNote']");
         this.nextButton = page.locator("div[class='flex flex-col sm:flex-row gap-3 sm:order-2'] button[type='button']");
         this.resetButton = page.locator("body > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > main:nth-child(2) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > button:nth-child(1)");
-
+        this.amount = page.locator("//input[@id='amount']");
+        this.paymentmode = page.locator("//button[@id='paymentMode']");
+        this.paymentModeSearchInput = page.locator("//input[@placeholder='Search options...']");
+        this.transactionID = page.locator("//input[@id='transactionId']");
+        this.notePad = page.locator("//textarea[@id='note']");
+        this.savebutton = page.locator("form[class='space-y-6'] div[class='flex flex-col sm:flex-row gap-3 sm:order-2'] button[type='button']");
 
         this.settingsButton = page.locator("//button[contains(@title,'Settings')]");
         this.showDeletedButton = page.locator("//button[normalize-space()='Show Deleted']");
@@ -126,6 +139,40 @@ export default class SalesOrdersPage {
         await this.page.getByText(productName, { exact: true }).click();
     }
 
+    async getTotalAmount() {
+        const totalCell = this.totalAmountCell.first();
+        await totalCell.waitFor({ state: 'visible' });
+        await this.page.waitForFunction(
+            (el) => !!el && !!el.textContent && el.textContent.trim().length > 0,
+            await totalCell.elementHandle()
+        );
+
+        const totalText = (await totalCell.innerText()).trim();
+        const cleaned = totalText.replace(/[^\d.,-]/g, '');
+        const hasComma = cleaned.includes(',');
+        const hasDot = cleaned.includes('.');
+        let normalized = cleaned;
+
+        if (hasComma && hasDot) {
+            const lastComma = cleaned.lastIndexOf(',');
+            const lastDot = cleaned.lastIndexOf('.');
+            if (lastComma > lastDot) {
+                normalized = cleaned.replace(/\./g, '').replace(',', '.');
+            } else {
+                normalized = cleaned.replace(/,/g, '');
+            }
+        } else if (hasComma) {
+            normalized = cleaned.replace(',', '.');
+        }
+
+        const amount = Number(normalized);
+        if (Number.isNaN(amount)) {
+            throw new Error(`Unable to parse total amount from: "${totalText}"`);
+        }
+
+        return amount;
+    }
+
     async createNewSalesOrder(data:{
         reference: string;
         biller: string;
@@ -154,7 +201,14 @@ export default class SalesOrdersPage {
         await this.selectFromDropdown(this.paymentStatusDropdown, data.paymentStatus);
         await this.salesNoteInput.fill(data.salesNote);
         await this.staffNoteinput.fill(data.staffNote);
+        const totalAmount = await this.getTotalAmount();
         await this.nextButton.click();
+        await this.amount.fill(totalAmount.toString());
+        await this.selectFromDropdown(this.paymentmode, 'Cash');
+        await this.transactionID.fill(`TXN${Date.now()}`);
+        await this.notePad.fill('Payment received in cash.');
+        await this.savebutton.click();
+        return totalAmount;
    }
 
 }
