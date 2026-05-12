@@ -2,7 +2,7 @@ import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
 
-  timeout: 60000,
+  timeout: 90000,
 
   workers: 1,
 
@@ -21,7 +21,7 @@ export default defineConfig({
 
     launchOptions: {
       args: ['--start-maximized'],
-      slowMo: 900
+      slowMo: 600
     }
 
   },

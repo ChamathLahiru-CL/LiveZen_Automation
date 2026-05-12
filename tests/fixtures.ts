@@ -5,6 +5,7 @@ import Topbar from '../pages/Topbar';
 import QuotationsPage from '../pages/Sales/QuotationsPage';
 import SalesOrdersPage from '../pages/Sales/SalesOrdersPage';
 import userData from '../testdata/user.json';
+import AllProductsPage from '../pages/product/AllProductsPage';
 
 type Fixtures = {
   loginPage: LoginPage;
@@ -12,7 +13,9 @@ type Fixtures = {
   topbar: Topbar;
   quotationsPage: QuotationsPage;
   salesOrdersPage: SalesOrdersPage;
+  allProductsPage: AllProductsPage;
   loggedIn: void;
+
 };
 
 export const test = base.extend<Fixtures>({
@@ -32,6 +35,9 @@ export const test = base.extend<Fixtures>({
   },
   salesOrdersPage: async ({ page }, use) => {
     await use(new SalesOrdersPage(page));
+  },
+  allProductsPage: async ({ page }, use) => {
+    await use(new AllProductsPage(page));
   },
   loggedIn: async ({ loginPage, page }, use) => {
     await loginPage.goto();
