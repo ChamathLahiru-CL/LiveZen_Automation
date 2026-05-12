@@ -313,8 +313,8 @@ export default class AddProductPage {
 
         // ─── Visibility Section ───────────────────────────────────────────────
         this.visibilitySection = page.locator("section:has(h2:text('Visibility'))");
-        this.webVisibilityToggle = page.locator("button#headlessui-switch-_r_b_");
-        this.posVisibilityToggle = page.locator("button#headlessui-switch-_r_c_");
+        this.webVisibilityToggle = this.visibilitySection.getByRole('switch').nth(0);
+        this.posVisibilityToggle = this.visibilitySection.getByRole('switch').nth(1);
 
         // ─── SEO Section ──────────────────────────────────────────────────────
         this.seoSection = page.locator("section:has(h2:text('Search Engine Optimization (SEO)'))");
@@ -376,7 +376,7 @@ export default class AddProductPage {
     async selectFromDropdown(dropdown: Locator, optionText: string) {
         await dropdown.click();
 
-        const dropdownOption = this.page.getByText(optionText, { exact: true });
+        const dropdownOption = this.page.getByRole('option', { name: optionText, exact: true });
         const searchInput = this.page.locator("input[placeholder='Search options...']");
 
         if (await searchInput.isVisible()) {
@@ -497,6 +497,7 @@ export default class AddProductPage {
     // =========================================================================
 
     async setWebVisibility(enable: boolean) {
+        await this.visibilitySection.scrollIntoViewIfNeeded();
         const isChecked = await this.webVisibilityToggle.getAttribute('aria-checked');
         const currentlyEnabled = isChecked === 'true';
         if (currentlyEnabled !== enable) {
@@ -505,6 +506,7 @@ export default class AddProductPage {
     }
 
     async setPosVisibility(enable: boolean) {
+        await this.visibilitySection.scrollIntoViewIfNeeded();
         const isChecked = await this.posVisibilityToggle.getAttribute('aria-checked');
         const currentlyEnabled = isChecked === 'true';
         if (currentlyEnabled !== enable) {
@@ -582,10 +584,10 @@ export default class AddProductPage {
     async fillWeight(weight: string) {
         await this.weightInput.fill(weight);
     }
-
-    async selectShippingClass(optionText: string) {
-        await this.selectFromDropdown(this.shippingClassDropdown, optionText);
-    }
+    
+    // async selectShippingClass(optionText: string) {
+    //     await this.selectFromDropdown(this.shippingClassDropdown, optionText);
+    // }
 
     async selectFulfillmentLocation(optionText: string) {
         await this.selectFromDropdown(this.fulfillmentLocationDropdown, optionText);
@@ -880,10 +882,12 @@ export default class AddProductPage {
             console.log(`   ✅ Weight            : ${data.weight}`);
         }
 
+        /*
         if (data.shippingClass) {
             await this.selectShippingClass(data.shippingClass);
             console.log(`   ✅ Shipping Class    : ${data.shippingClass}`);
         }
+        */
 
         if (data.fulfillmentLocation) {
             await this.selectFulfillmentLocation(data.fulfillmentLocation);

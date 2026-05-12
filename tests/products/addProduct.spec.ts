@@ -43,12 +43,12 @@ test('Add Product - Full Form Fill E2E', async ({ loggedIn, page, allProductsPag
         posVisibility: true,
 
         // SEO
-        metaTitle: 'Nike Air Max 2024 - Best Price',
-        metaDescription: 'Buy Nike Air Max 2024 at best price.',
-        metaKeywords: ['nike', 'air max', 'sneakers'],
+        metaTitle: 'ABCD Air Max 2024 - Best Price',
+        metaDescription: 'Buy ABCD Air Max 2024 at best price.',
+        metaKeywords: ['abcd', 'air max', 'sneakers'],
 
         // Inventory
-        sku: 'NIKE-AM-2024',
+        sku: 'ABCD-AM-2024',
         barcode: '9876543210',
         quantity: '100',
         manageInventory: true,
@@ -61,7 +61,7 @@ test('Add Product - Full Form Fill E2E', async ({ loggedIn, page, allProductsPag
         width: '20',
         weight: '1.2',
         shippingClass: 'Standard',
-        fulfillmentLocation: 'Warehouse A',
+        fulfillmentLocation: 'Main Warehouse',
 
         // Tax Pricing
         taxCostPrice: '80',
