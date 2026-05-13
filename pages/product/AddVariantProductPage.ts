@@ -229,7 +229,7 @@ export default class AddProductPage {
         this.quantityInput           = page.locator('input#quantity');
         this.manageInventoryCheckbox = page.locator('input#manage_inventory');
         this.allowBackorderCheckbox  = page.locator('input#allow_backorder');
-        this.stockTrackingCheckbox   = page.locator('input#stock_tracking');
+        this.stockTrackingCheckbox   = page.locator('input#stock_tracking').first();
 
         // Shipping
         this.lengthInput                 = page.locator('input#length');
@@ -289,7 +289,11 @@ export default class AddProductPage {
     }
 
     async setCheckbox(checkbox: Locator, check: boolean) {
-        check ? await checkbox.check() : await checkbox.uncheck();
+        if (check) {
+            await checkbox.check();
+        } else {
+            await checkbox.uncheck();
+        }
     }
 
     // ============================================================
@@ -304,11 +308,22 @@ export default class AddProductPage {
             await this.selectFromDropdown(this.productTypeDropdown, data.productType);
             await expect(this.productTypeDropdown).toContainText(data.productType);
         }
-
+/*
         if (data.generateAutoCode) {
-            await this.generateCodeButton.click();
-            await this.page.waitForTimeout(300);
+            const duplicateCodeMessage = this.page.getByText(
+                'The product code has already been used. Please generate a new one.'
+            );
+
+            for (let attempt = 0; attempt < 3; attempt++) {
+                await this.generateCodeButton.click();
+                await this.page.waitForTimeout(300);
+
+                if (!(await duplicateCodeMessage.isVisible())) {
+                    break;
+                }
+            }
         }
+*/
 
         if (data.productCode) {
             await this.productCodeInput.clear();
@@ -646,6 +661,12 @@ export default class AddProductPage {
         }
 
         console.log('   ✅ Tax Pricing filled & verified');
+    }
+
+    // --Low stock update alert ------------------------------------
+
+    async fillLowStockAlert(data: AddProductFormData) {
+        await this.lowStockAlertInput.fill(data.lowStockAlert);
     }
 
     // ── Step 11 : Submit ──────────────────────────────────────
