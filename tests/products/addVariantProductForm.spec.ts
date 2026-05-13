@@ -5,6 +5,12 @@ import AddProductPage, { AddProductFormData } from '../../pages/product/AddVaria
 // TEST DATA
 // ============================================================
 
+// TEMP: random number generator (100-200) for testing only. Remove after testing.
+const tempMin = 100;
+const tempMax = 200;
+const nextTempNumber = () => Math.floor(Math.random() * (tempMax - tempMin + 1)) + tempMin;
+const formatTempProductCode = (num: number) => `PROD${String(num).padStart(5, '0')}`;
+
 const SINGLE_PRODUCT: AddProductFormData = {
     // General Information
     productType:      'Single Product',
@@ -72,68 +78,72 @@ const SINGLE_PRODUCT: AddProductFormData = {
     action: 'save',
 };
 
-const VARIANT_PRODUCT: AddProductFormData = {
-    // General Information
-    productType:      'Variant Product',
-    productCode:     `PROD00035`,
-    generateAutoCode: true,
-    productName:      `test-${Date.now()}`,
-    secondaryName:    'test123',
-    slug:             `test-${Date.now()}`,
-    brand:            'ABCD',
-    category:         'Test 1 -> uim2',
-    tags:             ['adidas', 'variant', 'boost'],
-    status:           'Active',
+const createVariantProduct = (): AddProductFormData => {
+    const tempNum = nextTempNumber();
 
-    // Descriptions
-    productDescription: 'Adidas Ultra Boost with multiple variant options.',
-    invoiceDescription: 'Adidas Ultra Boost',
+    return {
+        // General Information
+        productType:      'Variant Product',
+        productCode:      formatTempProductCode(tempNum),
+        generateAutoCode: true,
+        productName:      `test-${tempNum}`,
+        secondaryName:    'test123',
+        slug:             `test-${tempNum}`,
+        brand:            'ABCD',
+        category:         'Test 1 -> uim2',
+        tags:             ['adidas', 'variant', 'boost'],
+        status:           'Active',
 
-    // Mock image
-    mockImageBuffer: Buffer.from(
-        'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
-        'base64'
-    ),
+        // Descriptions
+        productDescription: 'Adidas Ultra Boost with multiple variant options.',
+        invoiceDescription: 'Adidas Ultra Boost',
 
-    // Pricing & Inventory
-    productCost:   '90',
-    productPrice:  '180',
-    alertQuantity: '5',
+        // Mock image
+        mockImageBuffer: Buffer.from(
+            'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
+            'base64'
+        ),
 
-    // Visibility
-    webVisibility: true,
-    posVisibility: false,
+        // Pricing & Inventory
+        productCost:   '90',
+        productPrice:  '180',
+        alertQuantity: '5',
 
-    // Variant Options
-    variantColor:    true,
-    variantSize:     true,
-    variantMaterial: false,
-    variantPattern:  false,
-    variantStyle:    false,
+        // Visibility
+        webVisibility: true,
+        posVisibility: false,
 
-    // Inventory
-    sku:             `AD-UB-${Date.now()}`,
-    barcode:         '1234567890123',
-    quantity:        '100',
-    manageInventory: true,
-    stockTracking:   true,
-    allowBackorder:  false,
+        // Variant Options
+        variantColor:    true,
+        variantSize:     true,
+        variantMaterial: false,
+        variantPattern:  false,
+        variantStyle:    false,
 
-    // Shipping
-    length: '30',
-    height: '12',
-    width:  '20',
-    weight: '1.2',
+        // Inventory
+        sku:             `AD-UB-${tempNum}`,
+        barcode:         '1234567890123',
+        quantity:        '100',
+        manageInventory: true,
+        stockTracking:   true,
+        allowBackorder:  false,
 
-    // Tax Pricing
-    taxCostPrice: '90',
-    taxSalePrice: '180',
-    comparePrice: '210',
+        // Shipping
+        length: '30',
+        height: '12',
+        width:  '20',
+        weight: '1.2',
 
-    //low stock alert
-    lowStockAlert: '5',
-    // Action
-    action: 'save',
+        // Tax Pricing
+        taxCostPrice: '90',
+        taxSalePrice: '180',
+        comparePrice: '210',
+
+        //low stock alert
+        lowStockAlert: '5',
+        // Action
+        action: 'save',
+    };
 };
 
 const SAVE_AND_EDIT_PRODUCT: AddProductFormData = {
@@ -184,7 +194,7 @@ test.describe('Add Product - E2E Workflow Tests Variant Products', () => {
 
     test('TC_02 | Variant Product | Fill all sections with Variant Options & Save', async ({ page }) => {
 
-        await productPage.runAddProductWorkflow(VARIANT_PRODUCT);
+        await productPage.runAddProductWorkflow(createVariantProduct());
 
         //await expect(page).not.toHaveURL("https://app.livezencloud.com/products/create");
         await page.pause();
