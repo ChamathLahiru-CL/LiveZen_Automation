@@ -88,5 +88,21 @@
     "comparePrice": "180",
     "discountRules": "[{\"min_qty\": 5, \"discount\": 10}]",
     "action": "save"
-  }
+  },
+  "addVariantProductData": {
+  "productType": "Variant Product",
+  "productName": "Nike Air Max 2025",
+  "slug": "nike-air-max-2025",
+  "brand": "ABCD",
+  "category": "Sports Shoes",
+  "status": "Active",
+  "productCost": "75",
+  "productPrice": "149",
+  "alertQuantity": "10",
+  "sku": "NK-AMX-2025",
+  "quantity": "250",
+  "manageInventory": true,
+  "stockTracking": true,
+  "action": "save"
+}
 }
