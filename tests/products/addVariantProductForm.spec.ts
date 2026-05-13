@@ -464,4 +464,102 @@ test.describe('Add Product - E2E Workflow Tests Variant Products', () => {
         await page.getByRole('button', { name: 'Add Variant' }).click();
         await expect(skuInputs).toHaveCount(initialCount + 1);
     });
+
+    // ──────────────────────────────────────────────────────────
+    // TEST 13: Variant Product - SEO fields
+    // ──────────────────────────────────────────────────────────
+
+    test('TC_13 | Variant Product | Fill SEO fields', async ({ page }) => {
+
+        const tempNum = nextTempNumber();
+        await fillVariantBasics(productPage, tempNum);
+
+        const metaTitle = `Variant Meta Title ${tempNum}`;
+        const metaDescription = `Variant Meta Description ${tempNum}`;
+
+        await productPage.metaTitleInput.fill(metaTitle);
+        await expect(productPage.metaTitleInput).toHaveValue(metaTitle);
+
+        await productPage.metaDescriptionInput.fill(metaDescription);
+        await expect(productPage.metaDescriptionInput).toHaveValue(metaDescription);
+
+        await productPage.metaKeywordsInput.fill('variant');
+        await productPage.metaKeywordsInput.press('Enter');
+        await productPage.metaKeywordsInput.fill('seo');
+        await productPage.metaKeywordsInput.press('Enter');
+    });
+
+    // ──────────────────────────────────────────────────────────
+    // TEST 14: Variant Product - Visibility toggles
+    // ──────────────────────────────────────────────────────────
+
+    test('TC_14 | Variant Product | Visibility toggles', async ({ page }) => {
+
+        const tempNum = nextTempNumber();
+        await fillVariantBasics(productPage, tempNum);
+
+        await productPage.setToggle(productPage.webVisibilityToggle, false);
+        await productPage.setToggle(productPage.posVisibilityToggle, false);
+
+        await expect(productPage.webVisibilityToggle).toHaveAttribute('aria-checked', 'false');
+        await expect(productPage.posVisibilityToggle).toHaveAttribute('aria-checked', 'false');
+    });
+
+    // ──────────────────────────────────────────────────────────
+    // TEST 15: Variant Product - Shipping & Tax Pricing fields
+    // ──────────────────────────────────────────────────────────
+
+    test('TC_15 | Variant Product | Shipping & Tax Pricing fields', async ({ page }) => {
+
+        const tempNum = nextTempNumber();
+        await fillVariantBasics(productPage, tempNum);
+
+        await productPage.lengthInput.fill('31');
+        await productPage.heightInput.fill('16');
+        await productPage.widthInput.fill('21');
+        await productPage.weightInput.fill('1.8');
+
+        await expect(productPage.lengthInput).toHaveValue(/31/);
+        await expect(productPage.heightInput).toHaveValue(/16/);
+        await expect(productPage.widthInput).toHaveValue(/21/);
+        await expect(productPage.weightInput).toHaveValue(/1.8/);
+
+        await productPage.taxCostPriceInput.fill('90');
+        await productPage.taxSalePriceInput.fill('180');
+        await productPage.comparePriceInput.fill('210');
+        await productPage.discountRulesTextarea.fill('[{"min_qty": 2, "discount": 3}]');
+        await productPage.lowStockAlertInput.fill('6');
+
+        await expect(productPage.taxCostPriceInput).toHaveValue(/90/);
+        await expect(productPage.taxSalePriceInput).toHaveValue(/180/);
+        await expect(productPage.comparePriceInput).toHaveValue(/210/);
+        await expect(productPage.discountRulesTextarea).toHaveValue('[{"min_qty": 2, "discount": 3}]');
+        await expect(productPage.lowStockAlertInput).toHaveValue(/6/);
+    });
+
+    // ──────────────────────────────────────────────────────────
+    // TEST 16: Variant Product - Inventory fields
+    // ──────────────────────────────────────────────────────────
+
+    test('TC_16 | Variant Product | Inventory fields', async ({ page }) => {
+
+        const tempNum = nextTempNumber();
+        await fillVariantBasics(productPage, tempNum);
+
+        const sku = `INV-${tempNum}`;
+        await productPage.skuInput.fill(sku);
+        await productPage.barcodeInput.fill('1122334455667');
+        await productPage.quantityInput.fill('120');
+
+        await productPage.setCheckbox(productPage.manageInventoryCheckbox, true);
+        await productPage.setCheckbox(productPage.allowBackorderCheckbox, true);
+        await productPage.setCheckbox(productPage.stockTrackingCheckbox, true);
+
+        await expect(productPage.skuInput).toHaveValue(sku);
+        await expect(productPage.barcodeInput).toHaveValue('1122334455667');
+        await expect(productPage.quantityInput).toHaveValue(/120/);
+        await expect(productPage.manageInventoryCheckbox).toBeChecked();
+        await expect(productPage.allowBackorderCheckbox).toBeChecked();
+        await expect(productPage.stockTrackingCheckbox).toBeChecked();
+    });
 });
