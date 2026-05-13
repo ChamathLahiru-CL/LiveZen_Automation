@@ -2,9 +2,13 @@ import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
 
+  timeout: 90000,
+
   workers: 1,
 
   use: {
+    channel: 'msedge',
+    acceptDownloads: true,
 
     headless: false,
 
@@ -16,7 +20,8 @@ export default defineConfig({
     actionTimeout: 15000,
 
     launchOptions: {
-      slowMo: 1000
+      args: ['--start-maximized'],
+      slowMo: 400
     }
 
   },

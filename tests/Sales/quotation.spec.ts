@@ -29,3 +29,9 @@ test('Check the Canceled Quotations', async ({ loggedIn, page, quotationsPage })
     await expect(page).toHaveURL(/quotations/);
     await quotationsPage.cancelQuotation();
 });
+
+test('Add New Quotation', async ({ loggedIn, page, quotationsPage }) => {
+    await quotationsPage.navigateToQuotations();
+    await expect(page).toHaveURL(/quotations/);
+    await quotationsPage.addNewQuotation(userData.quotationData);
+});
