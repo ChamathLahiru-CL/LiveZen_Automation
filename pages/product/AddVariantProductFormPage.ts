@@ -322,8 +322,8 @@ export default class AddProductPage {
             await this.invoiceDescriptionEditor.fill(data.invoiceDescription);
         }
 
-        console.log('🖼️  [3/10] Processing Media...');
-        if (data.productImagePath) await this.productImageFileInput.setInputFiles(data.productImagePath);
+        // console.log('🖼️  [3/10] Processing Media...');
+        // if (data.productImagePath) await this.productImageFileInput.setInputFiles(data.productImagePath);
 
         console.log('💰 [4/10] Processing Pricing & Inventory...');
         if (data.productCost) await this.productCostInput.fill(data.productCost);
