@@ -675,269 +675,269 @@ export default class AddProductPage {
      * });
      */
     async fillFullForm(data: AddProductFormData): Promise<void> {
-        console.log('🚀 Starting End-to-End Product Form Fill...');
+        console.log('Starting End-to-End Product Form Fill...');
 
         // ── STEP 1: General Information ───────────────────────────────────────
-        console.log('📋 Step 1: Filling General Information...');
+        console.log('Step 1: Filling General Information...');
 
         if (data.productType) {
             await this.selectProductType(data.productType);
-            console.log(`   ✅ Product Type      : ${data.productType}`);
+            console.log(`   Product Type      : ${data.productType}`);
         }
 
         if (data.productCode) {
             await this.fillProductCode(data.productCode);
-            console.log(`   ✅ Product Code      : ${data.productCode}`);
+            console.log(`   Product Code      : ${data.productCode}`);
         }
 
         if (data.productName) {
             await this.fillProductName(data.productName);
-            console.log(`   ✅ Product Name      : ${data.productName}`);
+            console.log(`   Product Name      : ${data.productName}`);
         }
 
         if (data.secondaryName) {
             await this.fillSecondaryName(data.secondaryName);
-            console.log(`   ✅ Secondary Name    : ${data.secondaryName}`);
+            console.log(`   Secondary Name    : ${data.secondaryName}`);
         }
 
         if (data.slug) {
             await this.fillSlug(data.slug);
-            console.log(`   ✅ Slug              : ${data.slug}`);
+            console.log(`   Slug              : ${data.slug}`);
         }
 
         if (data.barcodeSymbology) {
             await this.selectBarcodeSymbology(data.barcodeSymbology);
-            console.log(`   ✅ Barcode Symbology : ${data.barcodeSymbology}`);
+            console.log(`   Barcode Symbology : ${data.barcodeSymbology}`);
         }
 
         if (data.brand) {
             await this.selectBrand(data.brand);
-            console.log(`   ✅ Brand             : ${data.brand}`);
+            console.log(`   Brand             : ${data.brand}`);
         }
 
         if (data.category) {
             await this.selectCategory(data.category);
-            console.log(`   ✅ Category          : ${data.category}`);
+            console.log(`   Category          : ${data.category}`);
         }
 
         if (data.tags && data.tags.length > 0) {
             for (const tag of data.tags) {
                 await this.addTag(tag);
-                console.log(`   ✅ Tag Added         : ${tag}`);
+                console.log(`   Tag Added         : ${tag}`);
             }
         }
 
         if (data.status) {
             await this.selectStatus(data.status);
-            console.log(`   ✅ Status            : ${data.status}`);
+            console.log(`   Status            : ${data.status}`);
         }
 
         // ── STEP 2: Descriptions ──────────────────────────────────────────────
-        console.log('📝 Step 2: Filling Descriptions...');
+        console.log('Step 2: Filling Descriptions...');
 
         if (data.productDescription) {
             await this.fillProductDescription(data.productDescription);
-            console.log(`   ✅ Product Description filled`);
+            console.log(`   Product Description filled`);
         }
 
         if (data.invoiceDescription) {
             await this.fillInvoiceDescription(data.invoiceDescription);
-            console.log(`   ✅ Invoice Description filled`);
+            console.log(`   Invoice Description filled`);
         }
 
         /*
         // ── STEP 3: Media ─────────────────────────────────────────────────────
-        console.log('🖼️  Step 3: Handling Media...');
+        console.log('Step 3: Handling Media...');
 
         if (data.productImagePath) {
             await this.uploadProductImage(data.productImagePath);
-            console.log(`   ✅ Product Image     : ${data.productImagePath}`);
+            console.log(`   Product Image     : ${data.productImagePath}`);
         }
         */
 
         // ── STEP 4: Pricing & Inventory ───────────────────────────────────────
-        console.log('💰 Step 4: Filling Pricing & Inventory...');
+        console.log('Step 4: Filling Pricing & Inventory...');
 
         if (data.productCost) {
             await this.fillProductCost(data.productCost);
-            console.log(`   ✅ Product Cost      : ${data.productCost}`);
+            console.log(`   Product Cost      : ${data.productCost}`);
         }
 
         if (data.productPrice) {
             await this.fillProductPrice(data.productPrice);
-            console.log(`   ✅ Product Price     : ${data.productPrice}`);
+            console.log(`   Product Price     : ${data.productPrice}`);
         }
 
         if (data.tax) {
             await this.selectProductTax(data.tax);
-            console.log(`   ✅ Product Tax       : ${data.tax}`);
+            console.log(`   Product Tax       : ${data.tax}`);
         }
 
         if (data.unit) {
             await this.selectProductUnit(data.unit);
-            console.log(`   ✅ Product Unit      : ${data.unit}`);
+            console.log(`   Product Unit      : ${data.unit}`);
         }
 
         if (data.saleUnit) {
             await this.selectSaleUnit(data.saleUnit);
-            console.log(`   ✅ Sale Unit         : ${data.saleUnit}`);
+            console.log(`   Sale Unit         : ${data.saleUnit}`);
         }
 
         if (data.purchaseUnit) {
             await this.selectPurchaseUnit(data.purchaseUnit);
-            console.log(`   ✅ Purchase Unit     : ${data.purchaseUnit}`);
+            console.log(`   Purchase Unit     : ${data.purchaseUnit}`);
         }
 
         if (data.alertQuantity) {
             await this.fillAlertQuantity(data.alertQuantity);
-            console.log(`   ✅ Alert Quantity    : ${data.alertQuantity}`);
+            console.log(`   Alert Quantity    : ${data.alertQuantity}`);
         }
 
         // ── STEP 5: Visibility ────────────────────────────────────────────────
-        console.log('👁️  Step 5: Setting Visibility...');
+        console.log('Step 5: Setting Visibility...');
 
         if (data.webVisibility !== undefined) {
             await this.setWebVisibility(data.webVisibility);
-            console.log(`   ✅ Web Visibility    : ${data.webVisibility}`);
+            console.log(`   Web Visibility    : ${data.webVisibility}`);
         }
 
         if (data.posVisibility !== undefined) {
             await this.setPosVisibility(data.posVisibility);
-            console.log(`   ✅ POS Visibility    : ${data.posVisibility}`);
+            console.log(`   POS Visibility    : ${data.posVisibility}`);
         }
 
         // ── STEP 6: SEO ───────────────────────────────────────────────────────
-        console.log('🔍 Step 6: Filling SEO Information...');
+        console.log('Step 6: Filling SEO Information...');
 
         if (data.metaTitle) {
             await this.fillMetaTitle(data.metaTitle);
-            console.log(`   ✅ Meta Title        : ${data.metaTitle}`);
+            console.log(`   Meta Title        : ${data.metaTitle}`);
         }
 
         if (data.metaDescription) {
             await this.fillMetaDescription(data.metaDescription);
-            console.log(`   ✅ Meta Description  : ${data.metaDescription}`);
+            console.log(`   Meta Description  : ${data.metaDescription}`);
         }
 
         if (data.metaKeywords && data.metaKeywords.length > 0) {
             for (const keyword of data.metaKeywords) {
                 await this.addMetaKeyword(keyword);
-                console.log(`   ✅ Meta Keyword      : ${keyword}`);
+                console.log(`   Meta Keyword      : ${keyword}`);
             }
         }
 
         // ── STEP 7: Inventory ─────────────────────────────────────────────────
-        console.log('📦 Step 7: Filling Inventory...');
+        console.log('Step 7: Filling Inventory...');
 
         if (data.sku) {
             await this.fillSku(data.sku);
-            console.log(`   ✅ SKU               : ${data.sku}`);
+            console.log(`   SKU               : ${data.sku}`);
         }
 
         if (data.barcode) {
             await this.fillBarcode(data.barcode);
-            console.log(`   ✅ Barcode           : ${data.barcode}`);
+            console.log(`   Barcode           : ${data.barcode}`);
         }
 
         if (data.quantity) {
             await this.fillQuantity(data.quantity);
-            console.log(`   ✅ Quantity          : ${data.quantity}`);
+            console.log(`   Quantity          : ${data.quantity}`);
         }
 
         if (data.manageInventory !== undefined) {
             await this.setManageInventory(data.manageInventory);
-            console.log(`   ✅ Manage Inventory  : ${data.manageInventory}`);
+            console.log(`   Manage Inventory  : ${data.manageInventory}`);
         }
 
         if (data.allowBackorder !== undefined) {
             await this.setAllowBackorder(data.allowBackorder);
-            console.log(`   ✅ Allow Backorder   : ${data.allowBackorder}`);
+            console.log(`   Allow Backorder   : ${data.allowBackorder}`);
         }
 
         if (data.stockTracking !== undefined) {
             await this.setStockTracking(data.stockTracking);
-            console.log(`   ✅ Stock Tracking    : ${data.stockTracking}`);
+            console.log(`   Stock Tracking    : ${data.stockTracking}`);
         }
 
         // ── STEP 8: Shipping ──────────────────────────────────────────────────
-        console.log('🚚 Step 8: Filling Shipping Details...');
+        console.log('Step 8: Filling Shipping Details...');
 
         if (data.length) {
             await this.fillLength(data.length);
-            console.log(`   ✅ Length            : ${data.length}`);
+            console.log(`   Length            : ${data.length}`);
         }
 
         if (data.height) {
             await this.fillHeight(data.height);
-            console.log(`   ✅ Height            : ${data.height}`);
+            console.log(`   Height            : ${data.height}`);
         }
 
         if (data.width) {
             await this.fillWidth(data.width);
-            console.log(`   ✅ Width             : ${data.width}`);
+            console.log(`   Width             : ${data.width}`);
         }
 
         if (data.weight) {
             await this.fillWeight(data.weight);
-            console.log(`   ✅ Weight            : ${data.weight}`);
+            console.log(`   Weight            : ${data.weight}`);
         }
 
         /*
         if (data.shippingClass) {
             await this.selectShippingClass(data.shippingClass);
-            console.log(`   ✅ Shipping Class    : ${data.shippingClass}`);
+            console.log(`   Shipping Class    : ${data.shippingClass}`);
         }
         */
 
         if (data.fulfillmentLocation) {
             await this.selectFulfillmentLocation(data.fulfillmentLocation);
-            console.log(`   ✅ Fulfillment Loc   : ${data.fulfillmentLocation}`);
+            console.log(`   Fulfillment Loc   : ${data.fulfillmentLocation}`);
         }
 
         // ── STEP 9: Tax Pricing ───────────────────────────────────────────────
-        console.log('🧾 Step 9: Filling Tax Pricing...');
+        console.log('Step 9: Filling Tax Pricing...');
 
         if (data.taxCostPrice) {
             await this.fillTaxCostPrice(data.taxCostPrice);
-            console.log(`   ✅ Tax Cost Price    : ${data.taxCostPrice}`);
+            console.log(`   Tax Cost Price    : ${data.taxCostPrice}`);
         }
 
         if (data.taxSalePrice) {
             await this.fillTaxSalePrice(data.taxSalePrice);
-            console.log(`   ✅ Tax Sale Price    : ${data.taxSalePrice}`);
+            console.log(`   Tax Sale Price    : ${data.taxSalePrice}`);
         }
 
         if (data.comparePrice) {
             await this.fillComparePrice(data.comparePrice);
-            console.log(`   ✅ Compare Price     : ${data.comparePrice}`);
+            console.log(`   Compare Price     : ${data.comparePrice}`);
         }
 
         if (data.discountRules) {
             await this.fillDiscountRules(data.discountRules);
-            console.log(`   ✅ Discount Rules    : filled`);
+            console.log(`   Discount Rules    : filled`);
         }
 
         // ── STEP 10: Form Action ──────────────────────────────────────────────
-        console.log('💾 Step 10: Submitting Form...');
+        console.log('Step 10: Submitting Form...');
 
         switch (data.action) {
             case 'save':
                 await this.save();
-                console.log('   ✅ Action: Save');
+                console.log('   Action: Save');
                 break;
             case 'saveAndEdit':
                 await this.saveAndEdit();
-                console.log('   ✅ Action: Save and Edit');
+                console.log('   Action: Save and Edit');
                 break;
             case 'reset':
                 await this.resetForm();
-                console.log('   ✅ Action: Reset');
+                console.log('   Action: Reset');
                 break;
             default:
-                console.log('   ⚠️  No action provided. Form was not submitted.');
+                console.log('   No action provided. Form was not submitted.');
                 break;
         }
 
-        console.log('🎉 End-to-End Product Form Fill Completed Successfully!');
+        console.log('End-to-End Product Form Fill Completed Successfully!');
     }
 }
