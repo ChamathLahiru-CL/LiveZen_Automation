@@ -11,6 +11,20 @@ const tempMax = 200;
 const nextTempNumber = () => Math.floor(Math.random() * (tempMax - tempMin + 1)) + tempMin;
 const formatTempProductCode = (num: number) => `PROD${String(num).padStart(5, '0')}`;
 
+const fillVariantBasics = async (productPage: AddProductPage, tempNum: number) => {
+    await productPage.selectFromDropdown(productPage.productTypeDropdown, 'Variant Product');
+    await productPage.productCodeInput.fill(formatTempProductCode(tempNum));
+    await productPage.productNameInput.fill(`variant-${tempNum}`);
+    await productPage.slugInput.fill(`variant-${tempNum}`);
+    await productPage.selectFromDropdown(productPage.brandDropdown, 'ABCD');
+    await productPage.selectFromDropdown(productPage.categoryDropdown, 'Test 1 -> uim2');
+    await productPage.categoryDropdown.click();
+    await productPage.selectFromDropdown(productPage.statusDropdown, 'Active');
+    await productPage.productCostInput.fill('90');
+    await productPage.productPriceInput.fill('180');
+    await productPage.alertQuantityInput.fill('5');
+};
+
 const SINGLE_PRODUCT: AddProductFormData = {
     // General Information
     productType:      'Single Product',
@@ -412,5 +426,42 @@ test.describe('Add Product - E2E Workflow Tests Variant Products', () => {
 
         await expect(page).not.toHaveURL("https://app.livezencloud.com/products/create");
         console.log('✅ TC_10 Passed: Variant Product with all 5 variant options created');
+    });
+
+    // ──────────────────────────────────────────────────────────
+    // TEST 11: Variant SKU input appears after selecting options
+    // ──────────────────────────────────────────────────────────
+
+    test('TC_11 | Variant Product | Variant SKU input appears', async ({ page }) => {
+
+        const tempNum = nextTempNumber();
+        await fillVariantBasics(productPage, tempNum);
+
+        await productPage.setCheckbox(productPage.variantColorCheckbox, true);
+        await productPage.setCheckbox(productPage.variantSizeCheckbox, true);
+
+        const variantSku = `VAR-SKU-${tempNum}`;
+        await expect(productPage.variantSKUInput).toBeVisible();
+        await productPage.variantSKUInput.fill(variantSku);
+        await expect(productPage.variantSKUInput).toHaveValue(variantSku);
+    });
+
+    // ──────────────────────────────────────────────────────────
+    // TEST 12: Add Variant adds a new row
+    // ──────────────────────────────────────────────────────────
+
+    test('TC_12 | Variant Product | Add Variant adds row', async ({ page }) => {
+
+        const tempNum = nextTempNumber();
+        await fillVariantBasics(productPage, tempNum);
+
+        await productPage.setCheckbox(productPage.variantColorCheckbox, true);
+        await productPage.setCheckbox(productPage.variantSizeCheckbox, true);
+
+        const skuInputs = page.locator('input[placeholder="Enter SKU"]');
+        const initialCount = await skuInputs.count();
+
+        await page.getByRole('button', { name: 'Add Variant' }).click();
+        await expect(skuInputs).toHaveCount(initialCount + 1);
     });
 });
