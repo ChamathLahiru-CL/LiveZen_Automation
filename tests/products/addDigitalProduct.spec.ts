@@ -140,8 +140,8 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
             productName:     'TC-002 Digital Product',
             secondaryName:   'TC-002 Secondary',
             slug:            'tc-002-digital-product',
-            brand:           'Test Brand',
-            category:        'Digital',
+            brand:           'ABCD',
+            category:        'Test 1',
             tags:            ['tag1', 'tag2'],
             status:          'Active',
         };
