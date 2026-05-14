@@ -1,7 +1,7 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../fixtures';
 import AddDigitalProductPage, {
     type AddDigitalProductFormData,
-} from '../../pages/addDigitalProductPage';
+} from '../../pages/product/addDigitalProductPage';
 
 // ============================================================
 // TEST DATA FIXTURES
@@ -80,9 +80,10 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
 
     let digitalProductPage: AddDigitalProductPage;
 
-    test.beforeEach(async ({ page }) => {
+    test.beforeEach(async ({ loggedIn, page }) => {
         digitalProductPage = new AddDigitalProductPage(page);
         await digitalProductPage.goto();
+        await digitalProductPage.selectProductType('Digital Product');
     });
 
     // ==========================================================

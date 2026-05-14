@@ -9,6 +9,7 @@ import { expect } from '@playwright/test';
 export interface AddDigitalProductFormData {
 
     // ── General Information ───────────────────────────────────
+    productType?:        string;
     productCode?:        string;
     generateAutoCode?:   boolean;
     productName?:        string;
@@ -259,6 +260,11 @@ export default class AddDigitalProductPage {
         check ? await checkbox.check() : await checkbox.uncheck();
     }
 
+    async selectProductType(productType: string): Promise<void> {
+        await this.selectFromDropdown(this.productTypeDropdown, productType);
+        await expect(this.productTypeDropdown).toContainText(productType);
+    }
+
     // ============================================================
     // SECTION FILL METHODS (Private)
     // ============================================================
@@ -268,7 +274,9 @@ export default class AddDigitalProductPage {
     private async fillGeneralInformation(data: AddDigitalProductFormData): Promise<void> {
 
         // Verify product type is pre-selected as Digital Product
-        await expect(this.productTypeDropdown).toContainText('Digital Product');
+        if (data.productType) {
+            await this.selectProductType(data.productType);
+        }
 
         if (data.generateAutoCode) {
             await this.generateCodeButton.click();
