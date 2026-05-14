@@ -7,6 +7,7 @@ import SalesOrdersPage from '../pages/Sales/SalesOrdersPage';
 import userData from '../testdata/user.json';
 import AllProductsPage from '../pages/product/AllProductsPage';
 import AddProductFormPage from '../pages/product/AddProductFormPage'; 
+import AddDigitalProductPage from '../pages/product/addDigitalProductPage';
 
 type Fixtures = {
   loginPage: LoginPage;
@@ -16,8 +17,11 @@ type Fixtures = {
   salesOrdersPage: SalesOrdersPage;
   allProductsPage: AllProductsPage;
   addProductFormPage: AddProductFormPage;
-  loggedIn: void;
+  addDigitalProductPage: AddDigitalProductPage;
 
+
+  loggedIn: void;
+  
 
 };
 
@@ -44,6 +48,9 @@ export const test = base.extend<Fixtures>({
   },
   addProductFormPage: async ({ page }, use) => {
     await use(new AddProductFormPage(page));
+  },
+  addDigitalProductPage: async ({ page }, use) => {
+    await use(new AddDigitalProductPage(page));
   },
 
   loggedIn: async ({ loginPage, page }, use) => {
