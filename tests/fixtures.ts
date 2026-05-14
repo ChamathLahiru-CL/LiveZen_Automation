@@ -7,6 +7,7 @@ import SalesOrdersPage from '../pages/Sales/SalesOrdersPage';
 import AllProductsPage from '../pages/product/AllProductsPage';
 import AddProductFormPage from '../pages/product/AddProductFormPage'; 
 import AddDigitalProductPage from '../pages/product/addDigitalProductPage';
+import AddComboProductPage from '../pages/product/AddComboProductPage';
 import { getLoginCredentials } from '../utils/env';
 
 type Fixtures = {
@@ -18,7 +19,7 @@ type Fixtures = {
   allProductsPage: AllProductsPage;
   addProductFormPage: AddProductFormPage;
   addDigitalProductPage: AddDigitalProductPage;
-
+  addComboProductPage: AddComboProductPage;
 
   loggedIn: void;
   
@@ -48,6 +49,9 @@ export const test = base.extend<Fixtures>({
   },
   addProductFormPage: async ({ page }, use) => {
     await use(new AddProductFormPage(page));
+  },
+  addComboProductPage: async ({ page }, use) => {
+    await use(new AddComboProductPage(page));
   },
   addDigitalProductPage: async ({ page }, use) => {
     await use(new AddDigitalProductPage(page));
