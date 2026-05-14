@@ -332,7 +332,7 @@ export default class AddDigitalProductPage {
             await expect(this.statusDropdown).toContainText(data.status);
         }
 
-        console.log('   ✅ General Information filled & verified');
+        console.log('   General Information filled & verified');
     }
 
     // ── Step 2 : Descriptions ─────────────────────────────────
@@ -351,7 +351,7 @@ export default class AddDigitalProductPage {
             await expect(this.invoiceDescriptionEditor).toContainText(data.invoiceDescription);
         }
 
-        console.log('   ✅ Descriptions filled & verified');
+        console.log('   Descriptions filled & verified');
     }
 
     // ── Step 3 : Media ────────────────────────────────────────
@@ -372,7 +372,7 @@ export default class AddDigitalProductPage {
             await this.page.waitForTimeout(500);
         }
 
-        console.log('   ✅ Media section handled');
+        console.log('   Media section handled');
     }
 
     // ── Step 4 : Pricing & Inventory ─────────────────────────
@@ -414,7 +414,7 @@ export default class AddDigitalProductPage {
             await expect(this.alertQuantityInput).toHaveValue(data.alertQuantity);
         }
 
-        console.log('   ✅ Pricing & Inventory filled & verified');
+        console.log('   Pricing & Inventory filled & verified');
     }
 
     // ── Step 5 : Visibility ───────────────────────────────────
@@ -433,7 +433,7 @@ export default class AddDigitalProductPage {
             expect(state).toBe(String(data.posVisibility));
         }
 
-        console.log('   ✅ Visibility set & verified');
+        console.log('   Visibility set & verified');
     }
 
     // ── Step 6 : SEO ──────────────────────────────────────────
@@ -457,7 +457,7 @@ export default class AddDigitalProductPage {
             }
         }
 
-        console.log('   ✅ SEO filled & verified');
+        console.log('   SEO filled & verified');
     }
 
     // ── Step 7 : Digital Delivery ─────────────────────────────
@@ -494,7 +494,7 @@ export default class AddDigitalProductPage {
             await expect(this.assignPerOrderCheckbox).toBeChecked({ checked: data.assignPerOrder });
         }
 
-        console.log('   ✅ Digital Delivery filled & verified');
+        console.log('   Digital Delivery filled & verified');
     }
 
     // ── Step 8 : License Management ───────────────────────────
@@ -534,7 +534,7 @@ export default class AddDigitalProductPage {
             await expect(this.expiryDateInput).not.toHaveValue('');
         }
 
-        console.log('   ✅ License Management filled & verified');
+        console.log('   License Management filled & verified');
     }
 
     // ── Step 9 : Tax Pricing ──────────────────────────────────
@@ -551,7 +551,7 @@ export default class AddDigitalProductPage {
             await expect(this.comparePriceInput).toHaveValue(data.comparePrice);
         }
 
-        console.log('   ✅ Tax Pricing filled & verified');
+        console.log('   Tax Pricing filled & verified');
     }
 
     // ============================================================
@@ -583,7 +583,7 @@ export default class AddDigitalProductPage {
     }
 
     // ============================================================
-    // 🚀 MASTER END-TO-END WORKFLOW METHOD
+    // MASTER END-TO-END WORKFLOW METHOD
     // ============================================================
 
     /**
@@ -596,40 +596,40 @@ export default class AddDigitalProductPage {
     async runAddDigitalProductWorkflow(data: AddDigitalProductFormData): Promise<void> {
 
         console.log('\n══════════════════════════════════════════════════');
-        console.log('🚀 START: Add Digital Product E2E Workflow');
+        console.log('START: Add Digital Product E2E Workflow');
         console.log('══════════════════════════════════════════════════\n');
 
-        console.log('🔍 Verifying page loaded correctly...');
+        console.log('Verifying page loaded correctly...');
         await this.verifyPageLoaded();
 
-        console.log('📋 Step 1/9 → General Information');
+        console.log('Step 1/9 → General Information');
         await this.fillGeneralInformation(data);
 
-        console.log('📝 Step 2/9 → Descriptions');
+        console.log('Step 2/9 → Descriptions');
         await this.fillDescriptions(data);
 
-        console.log('🖼️  Step 3/9 → Media');
+        console.log('Step 3/9 → Media');
         await this.fillMedia(data);
 
-        console.log('💰 Step 4/9 → Pricing & Inventory');
+        console.log('Step 4/9 → Pricing & Inventory');
         await this.fillPricingAndInventory(data);
 
-        console.log('👁️  Step 5/9 → Visibility');
+        console.log('Step 5/9 → Visibility');
         await this.fillVisibility(data);
 
-        console.log('🔍 Step 6/9 → SEO');
+        console.log('Step 6/9 → SEO');
         await this.fillSEO(data);
 
-        console.log('📦 Step 7/9 → Digital Delivery');
+        console.log('Step 7/9 → Digital Delivery');
         await this.fillDigitalDelivery(data);
 
-        console.log('🔑 Step 8/9 → License Management');
+        console.log('Step 8/9 → License Management');
         await this.fillLicenseManagement(data);
 
-        console.log('🧾 Step 9/9 → Tax Pricing');
+        console.log('Step 9/9 → Tax Pricing');
         await this.fillTaxPricing(data);
 
-        console.log('\n💾 Submitting Form...');
+        console.log('\nSubmitting Form...');
 
         switch (data.action) {
             case 'saveAndEdit':
@@ -645,7 +645,7 @@ export default class AddDigitalProductPage {
         }
 
         console.log('\n══════════════════════════════════════════════════');
-        console.log('🎉 DONE: Add Digital Product E2E Workflow Completed!');
+        console.log('DONE: Add Digital Product E2E Workflow Completed!');
         console.log('══════════════════════════════════════════════════\n');
     }
 }
