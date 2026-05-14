@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import LoginPage from '../pages/LoginPage';
 import SideBar from '../pages/SideBar';
 import Topbar from '../pages/Topbar';
-import userData from '../testdata/user.json';
+import { getLoginCredentials } from '../utils/env';
 
 // test("Change the language", async ({ page }) => {
 //     const login = new LoginPage(page);
@@ -29,8 +29,9 @@ test("Check the notifications", async ({ page }) => {
     const login = new LoginPage(page);
     const topbar = new Topbar(page);
     const sidebar = new SideBar(page);
+    const { username, password } = getLoginCredentials();
     await login.goto();
-    await login.login(userData.validUser.username, userData.validUser.password);
+    await login.login(username, password);
 
     await expect(page).toHaveURL(/dashboard/);
 
@@ -47,10 +48,11 @@ test("Check the settings functionality", async ({ page }) => {
 
     const login = new LoginPage(page);
     const topbar = new Topbar(page);
+    const { username, password } = getLoginCredentials();
 
     await login.goto();
 
-    await login.login(userData.validUser.username, userData.validUser.password);
+    await login.login(username, password);
 
     await expect(page).toHaveURL(/dashboard/);
 
@@ -66,10 +68,11 @@ test("Check the profile functionality", async ({ page }) => {
 
     const login = new LoginPage(page);
     const topbar = new Topbar(page);
+    const { username, password } = getLoginCredentials();
 
     await login.goto();
 
-    await login.login(userData.validUser.username, userData.validUser.password);
+    await login.login(username, password);
 
     await expect(page).toHaveURL(/dashboard/);
 

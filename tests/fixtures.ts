@@ -4,10 +4,11 @@ import SideBar from '../pages/SideBar';
 import Topbar from '../pages/Topbar';
 import QuotationsPage from '../pages/Sales/QuotationsPage';
 import SalesOrdersPage from '../pages/Sales/SalesOrdersPage';
-import userData from '../testdata/user.json';
 import AllProductsPage from '../pages/product/AllProductsPage';
 import AddProductFormPage from '../pages/product/AddProductFormPage'; 
 import AddDigitalProductPage from '../pages/product/addDigitalProductPage';
+import AddComboProductPage from '../pages/product/AddComboProductPage';
+import { getLoginCredentials } from '../utils/env';
 
 type Fixtures = {
   loginPage: LoginPage;
@@ -18,7 +19,7 @@ type Fixtures = {
   allProductsPage: AllProductsPage;
   addProductFormPage: AddProductFormPage;
   addDigitalProductPage: AddDigitalProductPage;
-
+  addComboProductPage: AddComboProductPage;
 
   loggedIn: void;
   
@@ -49,13 +50,17 @@ export const test = base.extend<Fixtures>({
   addProductFormPage: async ({ page }, use) => {
     await use(new AddProductFormPage(page));
   },
+  addComboProductPage: async ({ page }, use) => {
+    await use(new AddComboProductPage(page));
+  },
   addDigitalProductPage: async ({ page }, use) => {
     await use(new AddDigitalProductPage(page));
   },
 
   loggedIn: async ({ loginPage, page }, use) => {
     await loginPage.goto();
-    await loginPage.login(userData.validUser.username, userData.validUser.password);
+    const { username, password } = getLoginCredentials();
+    await loginPage.login(username, password);
     await expect(page).toHaveURL(/dashboard/);
     await use();
   }

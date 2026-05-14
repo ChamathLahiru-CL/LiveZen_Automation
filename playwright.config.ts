@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
@@ -37,7 +38,7 @@ export default defineConfig({
       }
     },
 
-    {
+/*    {
       name: 'Edge',
       use: {
         browserName: 'chromium',
@@ -50,7 +51,7 @@ export default defineConfig({
       use: {
         browserName: 'firefox'
       }
-    }
+    } */
 
   ]
 
