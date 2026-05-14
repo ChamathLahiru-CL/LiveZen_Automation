@@ -6,8 +6,9 @@ export default defineConfig({
 
   workers: 1,
 
+  reporter: [['html', { open: 'always' }]],
+
   use: {
-    channel: 'msedge',
     acceptDownloads: true,
 
     headless: false,
@@ -15,6 +16,7 @@ export default defineConfig({
     viewport: null,
 
     screenshot: 'only-on-failure',
+
     video: 'retain-on-failure',
 
     actionTimeout: 15000,
@@ -23,9 +25,33 @@ export default defineConfig({
       args: ['--start-maximized'],
       slowMo: 400
     }
-
   },
 
-  reporter: [['html', { open: 'always' }]]
+  projects: [
+
+    {
+      name: 'Chrome',
+      use: {
+        browserName: 'chromium',
+        channel: 'chrome'
+      }
+    },
+
+    {
+      name: 'Edge',
+      use: {
+        browserName: 'chromium',
+        channel: 'msedge'
+      }
+    },
+
+    {
+      name: 'Firefox',
+      use: {
+        browserName: 'firefox'
+      }
+    }
+
+  ]
 
 });
