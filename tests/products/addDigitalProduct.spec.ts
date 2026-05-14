@@ -3,9 +3,7 @@ import AddDigitalProductPage, {
     type AddDigitalProductFormData,
 } from '../../pages/product/addDigitalProductPage';
 
-// ============================================================
 // TEST DATA FIXTURES
-// ============================================================
 
 /**
  * Full valid data set — used for happy-path E2E test
@@ -79,9 +77,7 @@ const MINIMAL_DIGITAL_PRODUCT_DATA: AddDigitalProductFormData = {
     action:        'save',
 };
 
-// ============================================================
 // TEST SUITE
-// ============================================================
 
 test.describe('Add Digital Product — Full Coverage Test Suite', () => {
 
@@ -93,9 +89,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         await digitalProductPage.selectProductType('Digital Product');
     });
 
-    // ==========================================================
     // TC-001 : Page Load & Structure Verification
-    // ==========================================================
 
     test('TC-001 | Page Load — should display all sections and correct page title', async ({ page }) => {
 
@@ -137,9 +131,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         console.log('TC-001 Passed: Page loaded with all sections');
     });
 
-    // ==========================================================
     // TC-002 : General Information Section
-    // ==========================================================
 
     test('TC-002 | General Information — should fill and verify all fields', async () => {
 
@@ -187,9 +179,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         console.log('TC-002 Passed: General Information fields verified');
     });
 
-    // ==========================================================
     // TC-003 : Auto-Generate Product Code
-    // ==========================================================
 
     test('TC-003 | General Information — should auto-generate product code', async () => {
 
@@ -205,9 +195,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         console.log(`TC-003 Passed: Code generated — before: "${valueBefore}", after: "${valueAfter}"`);
     });
 
-    // ==========================================================
     // TC-004 : Descriptions Section
-    // ==========================================================
 
     test('TC-004 | Descriptions — should fill product and invoice descriptions', async () => {
 
@@ -225,9 +213,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         console.log('TC-004 Passed: Descriptions filled & verified');
     });
 
-    // ==========================================================
     // TC-005 : Media Section
-    // ==========================================================
 
     test('TC-005 | Media — should display product image dropzone', async () => {
 
@@ -249,9 +235,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         console.log('TC-005 Passed: Media dropzone visible & mock image uploaded');
     });
 
-    // ==========================================================
     // TC-006 : Pricing & Inventory Section
-    // ==========================================================
 
     test('TC-006 | Pricing & Inventory — should fill all pricing fields', async () => {
 
@@ -267,9 +251,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         console.log('TC-006 Passed: Pricing & Inventory fields filled & verified');
     });
 
-    // ==========================================================
     // TC-007 : Pricing — Optional Dropdowns
-    // ==========================================================
 
     test('TC-007 | Pricing — should select optional tax, unit, sale & purchase unit dropdowns', async () => {
 
@@ -294,9 +276,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         console.log('TC-007 Passed: Optional pricing dropdowns selected & verified');
     });
 
-    // ==========================================================
     // TC-008 : Visibility Toggles
-    // ==========================================================
 
     test('TC-008 | Visibility — should toggle Web and POS visibility', async () => {
 
@@ -317,9 +297,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         console.log('TC-008 Passed: Visibility toggles verified');
     });
 
-    // ==========================================================
     // TC-009 : SEO Section
-    // ==========================================================
 
     test('TC-009 | SEO — should fill meta title, description and keywords', async () => {
 
@@ -338,9 +316,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         console.log('TC-009 Passed: SEO fields filled & verified');
     });
 
-    // ==========================================================
     // TC-010 : Digital Delivery Section
-    // ==========================================================
 
     test('TC-010 | Digital Delivery — should fill delivery type, expiry, max downloads', async () => {
 
@@ -366,9 +342,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         console.log('TC-010 Passed: Digital Delivery fields filled & verified');
     });
 
-    // ==========================================================
     // TC-011 : Digital Delivery — Assign Per Order Checkbox
-    // ==========================================================
 
     test('TC-011 | Digital Delivery — should check and uncheck Assign per Order', async () => {
 
@@ -381,9 +355,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         console.log('TC-011 Passed: Assign per Order checkbox verified');
     });
 
-    // ==========================================================
     // TC-012 : License Management Section
-    // ==========================================================
 
     test('TC-012 | License Management — should fill token validity and allow instant access', async () => {
 
@@ -400,9 +372,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         console.log('TC-012 Passed: License Management fields filled & verified');
     });
 
-    // ==========================================================
     // TC-013 : License Management — Expiry Date via Flatpickr
-    // ==========================================================
 
     test('TC-013 | License Management — should set expiry date via flatpickr', async ({ page }) => {
 
@@ -427,9 +397,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         console.log(`TC-013 Passed: Expiry date set → "${expiryValue}"`);
     });
 
-    // ==========================================================
     // TC-014 : Tax Pricing Section
-    // ==========================================================
 
     test('TC-014 | Tax Pricing — should fill sale price and compare price', async () => {
 
@@ -442,9 +410,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         console.log('TC-014 Passed: Tax Pricing fields filled & verified');
     });
 
-    // ==========================================================
     // TC-015 : Reset Button
-    // ==========================================================
 
     test('TC-015 | Reset — should clear the form when Reset is clicked', async () => {
 
@@ -462,9 +428,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         console.log('TC-015 Passed: Reset button cleared the form');
     });
 
-    // ==========================================================
     // TC-016 : Required Field Validation
-    // ==========================================================
 
     test('TC-016 | Validation — should not submit with missing required fields', async () => {
 
@@ -477,9 +441,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         console.log('TC-016 Passed: Form blocked submission with empty required fields');
     });
 
-    // ==========================================================
     // TC-017 : Minimal Fields — Save with Required Data Only
-    // ==========================================================
 
     test('TC-017 | E2E Minimal — should save digital product with required fields only', async () => {
 
@@ -493,9 +455,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         console.log('TC-017 Passed: Minimal digital product saved successfully');
     });
 
-    // ==========================================================
     // TC-018 : Full E2E Happy Path
-    // ==========================================================
 
     test('TC-018 | E2E Full — should complete full digital product workflow successfully', async ({ page }) => {
 
@@ -510,9 +470,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         console.log('TC-018 Passed: Full digital product E2E workflow completed');
     });
 
-    // ==========================================================
     // TC-019 : Save and Edit Action
-    // ==========================================================
 
     test('TC-019 | Action — Save and Edit should redirect to edit page', async () => {
 
@@ -530,9 +488,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         console.log('TC-019 Passed: Save and Edit redirected to edit page');
     });
 
-    // ==========================================================
     // TC-020 : Negative — Slug with Invalid Characters
-    // ==========================================================
 
     test('TC-020 | Validation — slug should only accept lowercase letters, numbers, hyphens', async ({ page }) => {
 
@@ -545,9 +501,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         console.log('TC-020 Passed: Slug validation hint visible');
     });
 
-    // ==========================================================
     // TC-021 : Negative — Numeric Fields Accept Only Numbers
-    // ==========================================================
 
     test('TC-021 | Validation — numeric inputs should reject non-numeric input', async () => {
 
@@ -565,9 +519,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         console.log('TC-021 Passed: Numeric inputs rejected non-numeric values');
     });
 
-    // ==========================================================
     // TC-022 : Barcorde Symbology Dropdown
-    // ==========================================================
 
     test('TC-022 | General Information — should select barcode symbology', async () => {
 
@@ -580,9 +532,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         console.log('TC-022 Passed: Barcode symbology selected & verified');
     });
 
-    // ==========================================================
     // TC-023 : Allow Instant Access — Unchecked by Default
-    // ==========================================================
 
     test('TC-023 | License Management — Allow Instant Access should be unchecked by default', async () => {
 
@@ -591,9 +541,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         console.log('TC-023 Passed: Allow Instant Access is unchecked by default');
     });
 
-    // ==========================================================
     // TC-024 : Assign Per Order — Unchecked by Default
-    // ==========================================================
 
     test('TC-024 | Digital Delivery — Assign Per Order should be unchecked by default', async () => {
 
@@ -602,9 +550,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         console.log('TC-024 Passed: Assign Per Order is unchecked by default');
     });
 
-    // ==========================================================
     // TC-025 : Visibility Toggles — Enabled by Default
-    // ==========================================================
 
     test('TC-025 | Visibility — Web and POS visibility should be ON by default', async () => {
 
