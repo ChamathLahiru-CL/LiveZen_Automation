@@ -4,7 +4,10 @@ import { expect } from '@playwright/test';
 // ============================================================
 // INTERFACE
 // ============================================================
-
+export interface ComboProductItem {
+    productName: string;
+    quantity?:   number; // uses +/- stepper, default is 1
+}
 export interface AddComboProductFormData {
 
     // ── General Information ───────────────────────────────────
@@ -47,29 +50,23 @@ export interface AddComboProductFormData {
     metaKeywords?:       string[];
 
     // ── Combo Items ───────────────────────────────────────────
-    comboItems?: ComboItem[];
+    comboItems?:         ComboProductItem[];
 
-    // ── Inventory ─────────────────────────────────────────────
-    sku?:               string;
-    barcode?:           string;
-    quantity?:          string;
-    manageInventory?:   boolean;
-    allowBackorder?:    boolean;
-    stockTracking?:     boolean;
+        // ── Bundle Composition ────────────────────────────────────
+    bundleType?:                    string;
+    bundlePrice?:                   string;
+    allowOutOfStockComponents?:     boolean;
 
-    // ── Shipping ──────────────────────────────────────────────
-    length?:             string;
-    height?:             string;
-    width?:              string;
-    weight?:             string;
-    fulfillmentLocation?: string;
+    // ── Inventory (Combo-specific) ────────────────────────────
+    quantity?:           string;
+    inventoryMode?:      string;
+    bundleSku?:          string;
+    manageInventory?:    boolean;
 
-    // ── Tax Pricing ───────────────────────────────────────────
-    taxCostPrice?:       string;
-    taxSalePrice?:       string;
-    comparePrice?:       string;
-    discountRules?:      string;
-    lowStockAlert?:      string;
+    // ── Tax Pricing (Combo-specific) ──────────────────────────
+    discountType?:       string;
+    discountValue?:      string;
+    autoCalculate?:      boolean;
 
     // ── Final Action ──────────────────────────────────────────
     action?: 'save' | 'saveAndEdit' | 'reset';
@@ -126,33 +123,27 @@ export default class AddComboProductPage {
     readonly metaDescriptionInput: Locator;
     readonly metaKeywordsInput:    Locator;
 
-    // ── Combo Items ───────────────────────────────────────────
-    readonly addComboItemButton:        Locator;
-    readonly comboProductSearchInput:   Locator;
-    readonly comboItemQuantityInput:    Locator;
+    // ── Combo Products Section ────────────────────────────────
+    // Search input: placeholder="Search product"
+    readonly comboProductSearchInput: Locator;
+    // Quantity stepper minus / plus buttons & display (per row, used dynamically)
+    readonly comboTableBody:          Locator;
 
-    // ── Inventory ─────────────────────────────────────────────
-    readonly skuInput:                Locator;
-    readonly barcodeInput:            Locator;
-    readonly quantityInput:           Locator;
+    // ── Bundle Composition Section ────────────────────────────
+    readonly bundleTypeDropdown:              Locator;
+    readonly bundlePriceInput:                Locator;
+    readonly allowOutOfStockComponentsCheckbox: Locator;
+
+        // ── Inventory Section (Combo-specific) ────────────────────
+    readonly quantityInput:          Locator;
+    readonly inventoryModeDropdown:  Locator;
+    readonly bundleSkuInput:         Locator;
     readonly manageInventoryCheckbox: Locator;
-    readonly allowBackorderCheckbox:  Locator;
-    readonly stockTrackingCheckbox:   Locator;
 
-    // ── Shipping ──────────────────────────────────────────────
-    readonly lengthInput:                Locator;
-    readonly heightInput:                Locator;
-    readonly widthInput:                 Locator;
-    readonly weightInput:                Locator;
-    readonly shippingClassDropdown:      Locator;
-    readonly fulfillmentLocationDropdown: Locator;
-
-    // ── Tax Pricing ───────────────────────────────────────────
-    readonly taxCostPriceInput:    Locator;
-    readonly taxSalePriceInput:    Locator;
-    readonly comparePriceInput:    Locator;
-    readonly discountRulesTextarea: Locator;
-    readonly lowStockAlertInput:   Locator;
+    // ── Tax Pricing Section (Combo-specific) ──────────────────
+    readonly discountTypeDropdown:  Locator;
+    readonly discountValueInput:    Locator;
+    readonly autoCalculateCheckbox: Locator;
 
     // ── Breadcrumb & Page Header ──────────────────────────────
     readonly pageTitle:              Locator;
@@ -212,33 +203,38 @@ export default class AddComboProductPage {
         this.metaDescriptionInput = page.locator('input#meta_description');
         this.metaKeywordsInput    = page.locator('input#meta_keywords');
 
-        // Combo Items
-        this.addComboItemButton      = page.locator("button:has-text('Add Item')");
-        this.comboProductSearchInput = page.locator("input[placeholder='Search product...']");
-        this.comboItemQuantityInput  = page.locator("input[placeholder='Qty']");
+        // Combo Products Section
+        // The search input inside the Combo Products section
+        this.comboProductSearchInput = page.locator(
+            "input[placeholder='Search product']"
+        );
+        // The tbody of the combo products table
+        this.comboTableBody = page.locator(
+            "h2:text('Combo Products') ~ div table tbody"
+        );
 
-        // Inventory
-        this.skuInput                = page.locator('input#sku');
-        this.barcodeInput            = page.locator('input#barcode');
+        // Bundle Composition Section
+        this.bundleTypeDropdown               = page.locator('button#bundle_type');
+        this.bundlePriceInput                 = page.locator('input#bundle_price');
+        this.allowOutOfStockComponentsCheckbox = page.locator('input#allow_out_of_stock_components');
+
+        // Inventory Section (Combo-specific)
         this.quantityInput           = page.locator('input#quantity');
+        this.inventoryModeDropdown   = page.locator('button#inventory_mode');
+        this.bundleSkuInput          = page.locator('input#bundle_sku');
         this.manageInventoryCheckbox = page.locator('input#manage_inventory');
-        this.allowBackorderCheckbox  = page.locator('input#allow_backorder');
-        this.stockTrackingCheckbox   = page.locator('input#stock_tracking');
-
-        // Shipping
+      /*  // Shipping
         this.lengthInput                 = page.locator('input#length');
         this.heightInput                 = page.locator('input#height');
         this.widthInput                  = page.locator('input#width');
         this.weightInput                 = page.locator('input#weight');
         this.shippingClassDropdown       = page.locator('button#shipping_class_id');
         this.fulfillmentLocationDropdown = page.locator('button#fulfillment_location');
-
-        // Tax Pricing
-        this.taxCostPriceInput    = page.locator('input#cost_price');
-        this.taxSalePriceInput    = page.locator('input#sale_price');
-        this.comparePriceInput    = page.locator('input#compare_price');
-        this.discountRulesTextarea = page.locator('textarea#discount_rules');
-        this.lowStockAlertInput   = page.locator('input#low_stock_alert');
+*/
+        // Tax Pricing Section (Combo-specific)
+        this.discountTypeDropdown  = page.locator('button#discount_type');
+        this.discountValueInput    = page.locator('input#discount_value');
+        this.autoCalculateCheckbox = page.locator('input#auto_calculate');
 
         // Breadcrumb & Page Header
         this.pageTitle              = page.locator('h1.text-xl.font-semibold');
@@ -305,7 +301,7 @@ export default class AddComboProductPage {
         await this.selectFromDropdown(this.productTypeDropdown, 'Combo Product');
         await expect(this.productTypeDropdown).toContainText('Combo Product');
         await this.page.waitForTimeout(400);
-        console.log('   ✅ Product Type set to Combo Product');
+        console.log('Product Type set to Combo Product');
     }
 
     // ============================================================
@@ -523,167 +519,174 @@ private async fillGeneralInformation(data: AddComboProductFormData) {
     // ── Step 7 : Combo Items ──────────────────────────────────
 
     /**
-     * Adds combo items to the combo product.
-     * For each item:
-     *  1. Clicks "Add Item" button
-     *  2. Searches for the product by name
-     *  3. Selects the product from search results
-     *  4. Sets the quantity for that item
+     * Fills the Combo Products section.
+     *
+     * UI behaviour (from HTML & screenshots):
+     *  - There is a single search input: placeholder="Search product"
+     *  - Type a product name → select from dropdown results
+     *  - The product row appears in the table with SKU, Name, Unit Price,
+     *    a quantity stepper (− / number / +) and a delete button
+     *  - Quantity is controlled by clicking + / − buttons or
+     *    directly editing the number input inside the stepper
+     *  - Repeat for each combo item
      */
-    private async fillComboItems(data: AddComboProductFormData): Promise<void> {
+    private async fillComboProducts(data: AddComboProductFormData): Promise<void> {
 
-        const comboSection = this.page.locator("h2:text('Combo Items')");
-        const isVisible    = await comboSection.isVisible();
-
-        if (!isVisible) {
-            console.log('   ⚠️  Combo Items section not visible — skipping');
-            return;
-        }
+        // Verify section is visible
+        await expect(
+            this.page.locator("h2:text('Combo Products')")
+        ).toBeVisible();
 
         if (!data.comboItems || data.comboItems.length === 0) {
-            console.log('   ⚠️  No combo items provided — skipping');
+            console.log('   ⚠️  No combo items provided — skipping Combo Products section');
             return;
         }
 
         for (let i = 0; i < data.comboItems.length; i++) {
             const item = data.comboItems[i];
 
-            console.log(`   ➕ Adding combo item ${i + 1}: "${item.productName}" x ${item.quantity}`);
+            console.log(`   ➕ Adding combo item ${i + 1}: "${item.productName}"`);
 
-            // Click Add Item button
-            await this.addComboItemButton.click();
-            await this.page.waitForTimeout(300);
-
-            // Search for the product — use the last visible search input
-            const searchInputs = this.page.locator("input[placeholder='Search product...']");
-            const searchInput  = searchInputs.last();
-            await searchInput.fill(item.productName);
+            // Type in the search input
+            await this.comboProductSearchInput.click();
+            await this.comboProductSearchInput.fill(item.productName);
             await this.page.waitForTimeout(500);
 
-            // Select the product from search dropdown results
-            const productOption = this.page.getByRole('option', {
-                name: item.productName,
-                exact: false,
-            }).first();
+            // Select matching option from the autocomplete listbox
+            const productOption = this.page
+                .getByRole('option', { name: item.productName, exact: false })
+                .first();
+
             await productOption.waitFor({ state: 'visible', timeout: 5000 });
             await productOption.click();
 
-            // Set quantity — use the last visible qty input
-            const qtyInputs = this.page.locator("input[placeholder='Qty']");
-            const qtyInput  = qtyInputs.last();
-            await qtyInput.clear();
-            await qtyInput.fill(item.quantity);
-            await expect(qtyInput).toHaveValue(item.quantity);
+            // Wait for the row to appear in the table
+            await this.page.waitForTimeout(300);
 
-            await this.page.waitForTimeout(200);
+            // Set quantity via stepper if quantity > 1
+            // The stepper row is the last <tr> added to the tbody
+            if (item.quantity && item.quantity > 1) {
+                const rows       = this.page.locator("h2:text('Combo Products') ~ div table tbody tr");
+                const lastRow    = rows.last();
+                const plusButton = lastRow.locator('button:has-text("+")');
+
+                // Click + button (quantity - 1) times (starts at 1)
+                const clickCount = item.quantity - 1;
+                for (let c = 0; c < clickCount; c++) {
+                    await plusButton.click();
+                    await this.page.waitForTimeout(100);
+                }
+
+                // Verify quantity stepper display value
+                const stepperInput = lastRow.locator('input[type="number"], span.quantity-display, td:nth-child(4)');
+                console.log(`      ✅ Quantity set to ${item.quantity} for "${item.productName}"`);
+            }
         }
 
-        console.log(`   ✅ Combo Items filled & verified (${data.comboItems.length} items)`);
+        // Verify the table has the correct number of rows (excluding empty state row)
+        const tableRows = this.page.locator(
+            "h2:text('Combo Products') ~ div table tbody tr:not(:has(td[colspan]))"
+        );
+        await expect(tableRows).toHaveCount(data.comboItems.length);
+
+        console.log(`   ✅ Combo Products filled — ${data.comboItems.length} item(s) added`);
     }
 
-    // ── Step 8 : Inventory ────────────────────────────────────
+     // ── Step 8 : Bundle Composition ──────────────────────────
+
+    private async fillBundleComposition(data: AddComboProductFormData): Promise<void> {
+
+        // Verify section is visible
+        await expect(
+            this.page.locator("h2:text('Bundle Composition')")
+        ).toBeVisible();
+
+        if (data.bundleType) {
+            await this.selectFromDropdown(this.bundleTypeDropdown, data.bundleType);
+            await expect(this.bundleTypeDropdown).toContainText(data.bundleType);
+        }
+
+        if (data.bundlePrice) {
+            await this.bundlePriceInput.fill(data.bundlePrice);
+            await expect(this.bundlePriceInput).toHaveValue(data.bundlePrice);
+        }
+
+        if (data.allowOutOfStockComponents !== undefined) {
+            await this.setCheckbox(
+                this.allowOutOfStockComponentsCheckbox,
+                data.allowOutOfStockComponents
+            );
+            await expect(this.allowOutOfStockComponentsCheckbox).toBeChecked({
+                checked: data.allowOutOfStockComponents,
+            });
+        }
+
+        console.log('   ✅ Bundle Composition filled & verified');
+    }
+
+    // ── Step 9 : Inventory (Combo-specific) ───────────────────
 
     private async fillInventory(data: AddComboProductFormData): Promise<void> {
 
-        if (data.sku) {
-            await this.skuInput.fill(data.sku);
-            await expect(this.skuInput).toHaveValue(data.sku);
-        }
-
-        if (data.barcode) {
-            await this.barcodeInput.fill(data.barcode);
-            await expect(this.barcodeInput).toHaveValue(data.barcode);
-        }
+        // Verify section is visible
+        await expect(
+            this.page.locator("h2:text('Inventory')")
+        ).toBeVisible();
 
         if (data.quantity) {
             await this.quantityInput.fill(data.quantity);
             await expect(this.quantityInput).toHaveValue(data.quantity);
         }
 
+        if (data.inventoryMode) {
+            await this.selectFromDropdown(this.inventoryModeDropdown, data.inventoryMode);
+            await expect(this.inventoryModeDropdown).toContainText(data.inventoryMode);
+        }
+
+        if (data.bundleSku) {
+            await this.bundleSkuInput.fill(data.bundleSku);
+            await expect(this.bundleSkuInput).toHaveValue(data.bundleSku);
+        }
+
         if (data.manageInventory !== undefined) {
             await this.setCheckbox(this.manageInventoryCheckbox, data.manageInventory);
-            await expect(this.manageInventoryCheckbox).toBeChecked({ checked: data.manageInventory });
-        }
-
-        if (data.allowBackorder !== undefined) {
-            await this.setCheckbox(this.allowBackorderCheckbox, data.allowBackorder);
-            await expect(this.allowBackorderCheckbox).toBeChecked({ checked: data.allowBackorder });
-        }
-
-        if (data.stockTracking !== undefined) {
-            await this.setCheckbox(this.stockTrackingCheckbox, data.stockTracking);
-            await expect(this.stockTrackingCheckbox).toBeChecked({ checked: data.stockTracking });
+            await expect(this.manageInventoryCheckbox).toBeChecked({
+                checked: data.manageInventory,
+            });
         }
 
         console.log('   ✅ Inventory filled & verified');
     }
 
-    // ── Step 9 : Shipping ─────────────────────────────────────
-
-    private async fillShipping(data: AddComboProductFormData): Promise<void> {
-
-        if (data.length) {
-            await this.lengthInput.fill(data.length);
-            await expect(this.lengthInput).toHaveValue(data.length);
-        }
-
-        if (data.height) {
-            await this.heightInput.fill(data.height);
-            await expect(this.heightInput).toHaveValue(data.height);
-        }
-
-        if (data.width) {
-            await this.widthInput.fill(data.width);
-            await expect(this.widthInput).toHaveValue(data.width);
-        }
-
-        if (data.weight) {
-            await this.weightInput.fill(data.weight);
-            await expect(this.weightInput).toHaveValue(data.weight);
-        }
-
-        if (data.fulfillmentLocation) {
-            await this.selectFromDropdown(
-                this.fulfillmentLocationDropdown,
-                data.fulfillmentLocation
-            );
-            await expect(this.fulfillmentLocationDropdown).toContainText(data.fulfillmentLocation);
-        }
-
-        console.log('   ✅ Shipping filled & verified');
-    }
-
-    // ── Step 10 : Tax Pricing ─────────────────────────────────
+    // ── Step 10 : Tax Pricing (Combo-specific) ────────────────
 
     private async fillTaxPricing(data: AddComboProductFormData): Promise<void> {
 
-        if (data.taxCostPrice) {
-            await this.taxCostPriceInput.fill(data.taxCostPrice);
-            await expect(this.taxCostPriceInput).toHaveValue(data.taxCostPrice);
+        // Verify section is visible
+        await expect(
+            this.page.locator("h2:text('Tax Pricing')")
+        ).toBeVisible();
+
+        if (data.discountType) {
+            await this.selectFromDropdown(this.discountTypeDropdown, data.discountType);
+            await expect(this.discountTypeDropdown).toContainText(data.discountType);
         }
 
-        if (data.taxSalePrice) {
-            await this.taxSalePriceInput.fill(data.taxSalePrice);
-            await expect(this.taxSalePriceInput).toHaveValue(data.taxSalePrice);
+        if (data.discountValue) {
+            await this.discountValueInput.fill(data.discountValue);
+            await expect(this.discountValueInput).toHaveValue(data.discountValue);
         }
 
-        if (data.comparePrice) {
-            await this.comparePriceInput.fill(data.comparePrice);
-            await expect(this.comparePriceInput).toHaveValue(data.comparePrice);
-        }
-
-        if (data.discountRules) {
-            await this.discountRulesTextarea.fill(data.discountRules);
-            await expect(this.discountRulesTextarea).toHaveValue(data.discountRules);
-        }
-
-        if (data.lowStockAlert) {
-            await this.lowStockAlertInput.fill(data.lowStockAlert);
-            await expect(this.lowStockAlertInput).toHaveValue(data.lowStockAlert);
+        if (data.autoCalculate !== undefined) {
+            await this.setCheckbox(this.autoCalculateCheckbox, data.autoCalculate);
+            await expect(this.autoCalculateCheckbox).toBeChecked({
+                checked: data.autoCalculate,
+            });
         }
 
         console.log('   ✅ Tax Pricing filled & verified');
     }
+
 
     // ============================================================
     // ACTION METHODS (Public)
@@ -748,14 +751,14 @@ private async fillGeneralInformation(data: AddComboProductFormData) {
         console.log('🔍 Step 6/10 → SEO');
         await this.fillSEO(data);
 
-        console.log('🔗 Step 7/10 → Combo Items');
-        await this.fillComboItems(data);
+        console.log('🔗 Step 7/10 → Combo Products');
+        await this.fillComboProducts(data);
 
-        console.log('📦 Step 8/10 → Inventory');
+        console.log('📦 Step 8/10 → Bundle Composition');
+        await this.fillBundleComposition(data);
+
+        console.log('🗃️  Step 9/10 → Inventory');
         await this.fillInventory(data);
-
-        console.log('🚚 Step 9/10 → Shipping');
-        await this.fillShipping(data);
 
         console.log('🧾 Step 10/10 → Tax Pricing');
         await this.fillTaxPricing(data);
