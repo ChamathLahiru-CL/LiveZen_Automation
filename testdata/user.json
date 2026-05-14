@@ -1,7 +1,7 @@
 {
   "validUser": {
-    "username": "superadmin@shopbox.com",
-    "password": "Admin@123"
+    "username": "ENV_LIVEZEN_USERNAME",
+    "password": "ENV_LIVEZEN_PASSWORD"
   },
   "invalidUser": {
     "username": "invalid@example.com",
@@ -13,10 +13,10 @@
   },
   "emptyUsername": {
     "username": "",
-    "password": "Admin@123"
+    "password": "ENV_LIVEZEN_PASSWORD"
   },
   "emptyPassword": {
-    "username": "superadmin@shopbox.com",
+    "username": "ENV_LIVEZEN_USERNAME",
     "password": ""
   },
   "quotationData": {

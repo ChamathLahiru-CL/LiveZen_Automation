@@ -1,17 +1,20 @@
 import { test, expect } from '../fixtures';
 import userData from '../../testdata/user.json';
+import { getLoginCredentials } from '../../utils/env';
 
 test('Open Quotation Page', async ({ page, loginPage, quotationsPage }) => {
+    const { username, password } = getLoginCredentials();
     await loginPage.goto();
-    await loginPage.login(userData.validUser.username, userData.validUser.password);
+    await loginPage.login(username, password);
     await expect(page).toHaveURL(/dashboard/); 
     await quotationsPage.navigateToQuotations();
     await expect(page).toHaveURL(/quotations/);
 });
 
 test('Check the Sent Quotations', async ({ page, loginPage, quotationsPage }) => {
+    const { username, password } = getLoginCredentials();
     await loginPage.goto();
-    await loginPage.login(userData.validUser.username, userData.validUser.password);
+    await loginPage.login(username, password);
     await expect(page).toHaveURL(/dashboard/);
     await quotationsPage.navigateToQuotations();
     await expect(page).toHaveURL(/quotations/);

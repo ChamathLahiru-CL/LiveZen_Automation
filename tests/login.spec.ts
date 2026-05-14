@@ -2,14 +2,16 @@ import { test, expect } from '@playwright/test';
 import LoginPage from '../pages/LoginPage';
 import Topbar from '../pages/Topbar';
 import userData from '../testdata/user.json';
+import { getLoginCredentials } from '../utils/env';
 
 // Test Positive Login functionality
 test('Valid Login Test', async ({ page }) => {
     const login = new LoginPage(page);
     const topbar = new Topbar(page);
+    const { username, password } = getLoginCredentials();
 
     await login.goto();
-    await login.login(userData.validUser.username, userData.validUser.password);
+    await login.login(username, password);
     await expect(page).toHaveURL(/dashboard/);    
     await topbar.clickProfileButton();
     await topbar.clickLogoutButton();  
@@ -19,9 +21,10 @@ test('Valid Login Test', async ({ page }) => {
 test('Remember Me Functionality Test', async ({ page }) => {
     const login = new LoginPage(page);
     const topbar = new Topbar(page);
+    const { username, password } = getLoginCredentials();
     await login.goto();
-    await login.usernameInput.fill(userData.validUser.username);
-    await login.passwordInput.fill(userData.validUser.password);
+    await login.usernameInput.fill(username);
+    await login.passwordInput.fill(password);
     await login.rememberMeCheckbox.check();
     await login.loginButton.click();
     await expect(page).toHaveURL(/dashboard/);
@@ -29,8 +32,8 @@ test('Remember Me Functionality Test', async ({ page }) => {
     await topbar.clickLogoutButton();
     await expect(page).toHaveURL(/login/);
     await login.goto();
-    await expect(page.locator('#email')).toHaveValue(userData.validUser.username);
-    await expect(page.locator('#password')).toHaveValue(userData.validUser.password);
+    await expect(page.locator('#email')).toHaveValue(username);
+    await expect(page.locator('#password')).toHaveValue(password);
 });
 
 test('Forgot Password Link Test', async ({ page }) => {
@@ -42,9 +45,10 @@ test('Forgot Password Link Test', async ({ page }) => {
 
 test('Password Mask Toggle Test', async ({ page }) => {
     const login = new LoginPage(page);
+    const { username, password } = getLoginCredentials();
     await login.goto();
-    await login.usernameInput.fill(userData.validUser.username);
-    await login.passwordInput.fill(userData.validUser.password);
+    await login.usernameInput.fill(username);
+    await login.passwordInput.fill(password);
     await login.passwordMaskCheck();
 });
 
@@ -76,9 +80,10 @@ test('Empty Credentials Test', async ({ page }) => {
 // Empty username test
 test('Empty Username Test', async ({ page }) => {
     const login = new LoginPage(page);
+    const { password } = getLoginCredentials();
 
     await login.goto();
-    await login.login(userData.emptyUsername.username, userData.emptyUsername.password);
+    await login.login(userData.emptyUsername.username, password);
     
     await expect(page.locator('text=Username/email is required')).toBeVisible();
 });
@@ -86,9 +91,10 @@ test('Empty Username Test', async ({ page }) => {
 // Empty password test
 test('Empty Password Test', async ({ page }) => {
     const login = new LoginPage(page);
+    const { username } = getLoginCredentials();
 
     await login.goto();
-    await login.login(userData.emptyPassword.username, userData.emptyPassword.password);
+    await login.login(username, userData.emptyPassword.password);
     
     await expect(page.locator('text=Password is required')).toBeVisible();
 });

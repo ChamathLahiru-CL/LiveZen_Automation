@@ -4,10 +4,10 @@ import SideBar from '../pages/SideBar';
 import Topbar from '../pages/Topbar';
 import QuotationsPage from '../pages/Sales/QuotationsPage';
 import SalesOrdersPage from '../pages/Sales/SalesOrdersPage';
-import userData from '../testdata/user.json';
 import AllProductsPage from '../pages/product/AllProductsPage';
 import AddProductFormPage from '../pages/product/AddProductFormPage'; 
 import AddDigitalProductPage from '../pages/product/addDigitalProductPage';
+import { getLoginCredentials } from '../utils/env';
 
 type Fixtures = {
   loginPage: LoginPage;
@@ -55,7 +55,8 @@ export const test = base.extend<Fixtures>({
 
   loggedIn: async ({ loginPage, page }, use) => {
     await loginPage.goto();
-    await loginPage.login(userData.validUser.username, userData.validUser.password);
+    const { username, password } = getLoginCredentials();
+    await loginPage.login(username, password);
     await expect(page).toHaveURL(/dashboard/);
     await use();
   }
