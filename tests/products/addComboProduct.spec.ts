@@ -1,6 +1,7 @@
 import { test, expect } from '../fixtures';
 import AddComboProductPage, {
     type AddComboProductFormData,
+    type ComboProductItem,
     type ComboItem,
 } from '../../pages/product/AddComboProductPage';
 
@@ -42,27 +43,26 @@ const FULL_COMBO_PRODUCT_DATA: AddComboProductFormData = {
     metaKeywords:    ['combo', 'qa', 'test'],
 
     // Combo Items
-    comboItems: [
-        { productName: 'Product A', quantity: '2' },
-        { productName: 'Product B', quantity: '1' },
+     comboItems: [
+        { productName: 'Product A', quantity: 2 },
+        { productName: 'Product B', quantity: 1 },
     ],
 
-    // Inventory
-    sku:      'COMBO-QA-001',
-    barcode:  '1234567890123',
-    quantity: '50',
+        // Bundle Composition
+    bundleType:                'Fixed Bundle',
+    bundlePrice:               '350',
+    allowOutOfStockComponents: false,
 
-    // Shipping
-    length: '10',
-    height: '5',
-    width:  '8',
-    weight: '1.5',
+    // Inventory (Combo-specific)
+    quantity:        '50',
+    inventoryMode:   'Track Bundle',
+    bundleSku:       'BUNDLE-QA-001',
+    manageInventory: true,
 
-    // Tax Pricing
-    taxCostPrice: '90',
-    taxSalePrice: '180',
-    comparePrice: '220',
-    lowStockAlert: '3',
+    // Tax Pricing (Combo-specific)
+    discountType:  'Percentage',
+    discountValue: '10',
+    autoCalculate: true,
 
     // Action
     action: 'save',
@@ -87,17 +87,18 @@ const MINIMAL_COMBO_PRODUCT_DATA: AddComboProductFormData = {
 /**
  * Single combo item data set
  */
-const SINGLE_COMBO_ITEM: ComboItem[] = [
-    { productName: 'Product A', quantity: '3' },
-];
+const SINGLE_COMBO_ITEM: ComboProductItem = {
+    productName: 'Product A',
+    quantity:    1,
+};
 
 /**
  * Multiple combo items data set
  */
-const MULTIPLE_COMBO_ITEMS: ComboItem[] = [
-    { productName: 'Product A', quantity: '2' },
-    { productName: 'Product B', quantity: '1' },
-    { productName: 'Product C', quantity: '4' },
+const MULTIPLE_COMBO_ITEMS: ComboProductItem[] = [
+    { productName: 'Product A', quantity: 1 },
+    { productName: 'Product B', quantity: 2 },
+    { productName: 'Product C', quantity: 3 },
 ];
 
 // ============================================================
@@ -130,7 +131,7 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
         await expect(comboProductPage.saveAndEditButton).toBeVisible();
         await expect(comboProductPage.saveButton).toBeVisible();
 
-        console.log('✅ TC-001 Passed: Page loaded with correct title & breadcrumb');
+        console.log('TC-001 Passed: Page loaded with correct title & breadcrumb');
     });
 
     // ==========================================================
@@ -142,7 +143,7 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
         await comboProductPage.selectComboProductType();
         await expect(comboProductPage.productTypeDropdown).toContainText('Combo Product');
 
-        console.log('✅ TC-002 Passed: Combo Product type selected & verified');
+        console.log('TC-002 Passed: Combo Product type selected & verified');
     });
 
     // ==========================================================
@@ -157,7 +158,7 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
         await page.pause();
         await expect(comboSection).toBeVisible();
         
-        console.log('✅ TC-003 Passed: Combo Items section visible after type selection');
+        console.log('TC-003 Passed: Combo Items section visible after type selection');
     });
 
     // ==========================================================
@@ -181,18 +182,18 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
         await expect(comboProductPage.slugInput).toHaveValue('tc-004-combo-product');
 
         // Brand
-        await comboProductPage.selectFromDropdown(comboProductPage.brandDropdown, 'Test Brand');
-        await expect(comboProductPage.brandDropdown).toContainText('Test Brand');
+        await comboProductPage.selectFromDropdown(comboProductPage.brandDropdown, 'Test 1');
+        await expect(comboProductPage.brandDropdown).toContainText('Test 1');
 
         // Category
-        await comboProductPage.selectFromDropdown(comboProductPage.categoryDropdown, 'Combo');
-        await expect(comboProductPage.categoryDropdown).toContainText('Combo');
+        await comboProductPage.selectFromDropdown(comboProductPage.categoryDropdown, 'Test 1');
+        await expect(comboProductPage.categoryDropdown).toContainText('Test 1');
         await comboProductPage.categoryDropdown.click();
 
         // Tags
         const tags = ['combo', 'test', 'qa'];
         for (const tag of tags) {
-            await comboProductPage.tagsInput.fill(tag);
+            await comboProductPage.tagsInput.fill(tag); 
             await comboProductPage.tagsInput.press('Enter');
         }
 
@@ -200,7 +201,7 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
         await comboProductPage.selectFromDropdown(comboProductPage.statusDropdown, 'Active');
         await expect(comboProductPage.statusDropdown).toContainText('Active');
 
-        console.log('✅ TC-004 Passed: General Information fields filled & verified');
+        console.log('TC-004 Passed: General Information fields filled & verified');
     });
 
     // ==========================================================
@@ -220,7 +221,7 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
         expect(valueAfter).not.toBe('');
         expect(valueAfter.length).toBeGreaterThan(0);
 
-        console.log(`✅ TC-005 Passed: Code generated — before: "${valueBefore}", after: "${valueAfter}"`);
+        console.log(`TC-005 Passed: Code generated — before: "${valueBefore}", after: "${valueAfter}"`);
     });
 
     // ==========================================================
@@ -237,7 +238,7 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
         );
         await expect(comboProductPage.barcodeSymbologyDropdown).toContainText('CODE128');
 
-        console.log('✅ TC-006 Passed: Barcode symbology selected & verified');
+        console.log('TC-006 Passed: Barcode symbology selected & verified');
     });
 
     // ==========================================================
@@ -259,7 +260,7 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
         await comboProductPage.invoiceDescriptionEditor.fill(invoiceDesc);
         await expect(comboProductPage.invoiceDescriptionEditor).toContainText(invoiceDesc);
 
-        console.log('✅ TC-007 Passed: Descriptions filled & verified');
+        console.log('TC-007 Passed: Descriptions filled & verified');
     });
 
     // ==========================================================
@@ -284,7 +285,7 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
         });
 
         await comboProductPage.page.waitForTimeout(500);
-        console.log('✅ TC-008 Passed: Media dropzone visible & mock image uploaded');
+        console.log('TC-008 Passed: Media dropzone visible & mock image uploaded');
     });
 
     // ==========================================================
@@ -304,7 +305,7 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
         await comboProductPage.alertQuantityInput.fill('5');
         await expect(comboProductPage.alertQuantityInput).toHaveValue('5');
 
-        console.log('✅ TC-009 Passed: Pricing & Inventory core fields filled & verified');
+        console.log('TC-009 Passed: Pricing & Inventory core fields filled & verified');
     });
 
     // ==========================================================
@@ -315,8 +316,8 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
 
         await comboProductPage.selectComboProductType();
 
-        await comboProductPage.selectFromDropdown(comboProductPage.taxDropdown, 'VAT 10%');
-        await expect(comboProductPage.taxDropdown).toContainText('VAT 10%');
+        await comboProductPage.selectFromDropdown(comboProductPage.taxDropdown, 'Zero VAT (0%)');
+        await expect(comboProductPage.taxDropdown).toContainText('Zero VAT (0%)');
 
         await comboProductPage.selectFromDropdown(comboProductPage.unitDropdown, 'Piece');
         await expect(comboProductPage.unitDropdown).toContainText('Piece');
@@ -327,7 +328,7 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
         await comboProductPage.selectFromDropdown(comboProductPage.purchaseUnitDropdown, 'Piece');
         await expect(comboProductPage.purchaseUnitDropdown).toContainText('Piece');
 
-        console.log('✅ TC-010 Passed: Optional pricing dropdowns selected & verified');
+        console.log('TC-010 Passed: Optional pricing dropdowns selected & verified');
     });
 
     // ==========================================================
@@ -360,7 +361,7 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
             await comboProductPage.posVisibilityToggle.getAttribute('aria-checked')
         ).toBe('false');
 
-        console.log('✅ TC-011 Passed: Visibility toggles set & verified');
+        console.log('TC-011 Passed: Visibility toggles set & verified');
     });
 
     // ==========================================================
@@ -379,7 +380,7 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
             await comboProductPage.posVisibilityToggle.getAttribute('aria-checked')
         ).toBe('true');
 
-        console.log('✅ TC-012 Passed: Visibility toggles are ON by default');
+        console.log('TC-012 Passed: Visibility toggles are ON by default');
     });
 
     // ==========================================================
@@ -404,184 +405,207 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
             await comboProductPage.metaKeywordsInput.press('Enter');
         }
 
-        console.log('✅ TC-013 Passed: SEO fields filled & verified');
+        console.log('TC-013 Passed: SEO fields filled & verified');
     });
 
     // ==========================================================
     // TC-014 : Combo Items — Add Single Item
     // ==========================================================
 
-    test('TC-014 | Combo Items — should add a single combo item successfully', async () => {
+    test('TC-014 | Combo Products — should search and add a single product to combo list', async () => {
 
         await comboProductPage.selectComboProductType();
 
-        // Verify "Add Item" button is visible
-        await expect(comboProductPage.addComboItemButton).toBeVisible();
-
-        await comboProductPage.addComboItemButton.click();
-        await comboProductPage.page.waitForTimeout(300);
-
-        // Search input should appear
+        // Verify search input is visible (no "Add Item" button in actual UI)
         await expect(comboProductPage.comboProductSearchInput).toBeVisible();
 
-        await comboProductPage.comboProductSearchInput.fill(SINGLE_COMBO_ITEM[0].productName);
+        // Search for the product
+        await comboProductPage.comboProductSearchInput.fill(SINGLE_COMBO_ITEM.productName);
         await comboProductPage.page.waitForTimeout(500);
 
-        // Select first result
+        // Select from autocomplete results
         const productOption = comboProductPage.page
-            .getByRole('option', { name: SINGLE_COMBO_ITEM[0].productName, exact: false })
+            .getByRole('option', { name: SINGLE_COMBO_ITEM.productName, exact: false })
             .first();
 
         await productOption.waitFor({ state: 'visible', timeout: 5000 });
         await productOption.click();
+        await comboProductPage.page.waitForTimeout(300);
 
-        // Set quantity
-        await comboProductPage.comboItemQuantityInput.clear();
-        await comboProductPage.comboItemQuantityInput.fill(SINGLE_COMBO_ITEM[0].quantity);
-        await expect(comboProductPage.comboItemQuantityInput).toHaveValue(
-            SINGLE_COMBO_ITEM[0].quantity
+        // Verify product row appeared in the table
+        const tableRows = comboProductPage.page.locator(
+            "h2:text('Combo Products') ~ div table tbody tr:not(:has(td[colspan]))"
         );
+        await expect(tableRows).toHaveCount(1);
+        await expect(tableRows.first()).toContainText(SINGLE_COMBO_ITEM.productName);
 
-        console.log('✅ TC-014 Passed: Single combo item added & verified');
+        console.log('TC-014 Passed: Single combo product searched, added & verified in table');
     });
 
     // ==========================================================
-    // TC-015 : Combo Items — Add Multiple Items
+    // TC-015 : Combo Products — Add Multiple Items via Search
     // ==========================================================
 
-    test('TC-015 | Combo Items — should add multiple combo items successfully', async () => {
+     test('TC-015 | Combo Products — should add multiple products to combo list via search', async () => {
 
         await comboProductPage.selectComboProductType();
 
-        for (let i = 0; i < MULTIPLE_COMBO_ITEMS.length; i++) {
-            const item = MULTIPLE_COMBO_ITEMS[i];
+        for (const item of MULTIPLE_COMBO_ITEMS) {
 
-            await comboProductPage.addComboItemButton.click();
-            await comboProductPage.page.waitForTimeout(300);
-
-            const searchInputs = comboProductPage.page.locator(
-                "input[placeholder='Search product...']"
-            );
-            const searchInput = searchInputs.last();
-            await searchInput.fill(item.productName);
+            // Search for the product
+            await comboProductPage.comboProductSearchInput.click();
+            await comboProductPage.comboProductSearchInput.fill(item.productName);
             await comboProductPage.page.waitForTimeout(500);
 
+            // Select from autocomplete results
             const productOption = comboProductPage.page
                 .getByRole('option', { name: item.productName, exact: false })
                 .first();
 
             await productOption.waitFor({ state: 'visible', timeout: 5000 });
             await productOption.click();
+            await comboProductPage.page.waitForTimeout(300);
 
-            const qtyInputs = comboProductPage.page.locator("input[placeholder='Qty']");
-            const qtyInput  = qtyInputs.last();
-            await qtyInput.clear();
-            await qtyInput.fill(item.quantity);
-            await expect(qtyInput).toHaveValue(item.quantity);
+            // Increase quantity using + stepper if quantity > 1
+            if (item.quantity && item.quantity > 1) {
+                const rows       = comboProductPage.page.locator(
+                    "h2:text('Combo Products') ~ div table tbody tr:not(:has(td[colspan]))"
+                );
+                const lastRow    = rows.last();
+                const plusButton = lastRow.locator('button:has-text("+")');
+
+                for (let c = 0; c < item.quantity - 1; c++) {
+                    await plusButton.click();
+                    await comboProductPage.page.waitForTimeout(100);
+                }
+            }
         }
 
-        // Verify all rows are present
-        const allQtyInputs = comboProductPage.page.locator("input[placeholder='Qty']");
-        await expect(allQtyInputs).toHaveCount(MULTIPLE_COMBO_ITEMS.length);
+        // Verify all product rows are present in the table
+        const tableRows = comboProductPage.page.locator(
+            "h2:text('Combo Products') ~ div table tbody tr:not(:has(td[colspan]))"
+        );
+        await expect(tableRows).toHaveCount(MULTIPLE_COMBO_ITEMS.length);
 
-        console.log(`✅ TC-015 Passed: ${MULTIPLE_COMBO_ITEMS.length} combo items added & verified`);
+        console.log(`TC-015 Passed: ${MULTIPLE_COMBO_ITEMS.length} combo items added & verified`);
     });
 
     // ==========================================================
     // TC-016 : Inventory Section
     // ==========================================================
 
-    test('TC-016 | Inventory — should fill SKU, barcode, quantity and checkboxes', async () => {
+    test('TC-016 | Inventory — should fill quantity, inventory mode, bundle SKU and manage inventory', async () => {
 
         await comboProductPage.selectComboProductType();
 
-        await comboProductPage.skuInput.fill('COMBO-SKU-016');
-        await expect(comboProductPage.skuInput).toHaveValue('COMBO-SKU-016');
+        await expect(comboProductPage.page.locator("h2:text('Inventory')")).toBeVisible();
 
-        await comboProductPage.barcodeInput.fill('9876543210987');
-        await expect(comboProductPage.barcodeInput).toHaveValue('9876543210987');
-
+        // Quantity
         await comboProductPage.quantityInput.fill('25');
         await expect(comboProductPage.quantityInput).toHaveValue('25');
 
-        // Checkboxes
+        // Inventory Mode dropdown
+        await comboProductPage.selectFromDropdown(
+            comboProductPage.inventoryModeDropdown,
+            'Track Bundle'
+        );
+        await expect(comboProductPage.inventoryModeDropdown).toContainText('Track Bundle');
+
+        // Bundle SKU
+        await comboProductPage.bundleSkuInput.fill('BUNDLE-SKU-016');
+        await expect(comboProductPage.bundleSkuInput).toHaveValue('BUNDLE-SKU-016');
+
+        // Manage Inventory checkbox
         await comboProductPage.setCheckbox(comboProductPage.manageInventoryCheckbox, true);
         await expect(comboProductPage.manageInventoryCheckbox).toBeChecked();
 
-        await comboProductPage.setCheckbox(comboProductPage.allowBackorderCheckbox, true);
-        await expect(comboProductPage.allowBackorderCheckbox).toBeChecked();
-
-        await comboProductPage.setCheckbox(comboProductPage.stockTrackingCheckbox, true);
-        await expect(comboProductPage.stockTrackingCheckbox).toBeChecked();
-
-        console.log('✅ TC-016 Passed: Inventory fields filled & verified');
+        console.log('TC-016 Passed: Inventory (combo-specific) fields filled & verified');
     });
 
+
     // ==========================================================
-    // TC-017 : Inventory Checkboxes — Uncheck
+    // TC-017 : Inventory — Manage Inventory Checkbox Toggle
     // ==========================================================
 
-    test('TC-017 | Inventory — should uncheck inventory management checkboxes', async () => {
+     test('TC-017 | Inventory — should check and uncheck Manage Inventory checkbox', async () => {
 
         await comboProductPage.selectComboProductType();
 
+        // Check
+        await comboProductPage.setCheckbox(comboProductPage.manageInventoryCheckbox, true);
+        await expect(comboProductPage.manageInventoryCheckbox).toBeChecked();
+
+        // Uncheck
         await comboProductPage.setCheckbox(comboProductPage.manageInventoryCheckbox, false);
         await expect(comboProductPage.manageInventoryCheckbox).not.toBeChecked();
 
-        await comboProductPage.setCheckbox(comboProductPage.allowBackorderCheckbox, false);
-        await expect(comboProductPage.allowBackorderCheckbox).not.toBeChecked();
-
-        await comboProductPage.setCheckbox(comboProductPage.stockTrackingCheckbox, false);
-        await expect(comboProductPage.stockTrackingCheckbox).not.toBeChecked();
-
-        console.log('✅ TC-017 Passed: Inventory checkboxes unchecked & verified');
+        console.log('TC-017 Passed: Manage Inventory checkbox toggled & verified');
     });
 
     // ==========================================================
-    // TC-018 : Shipping Section
+    // TC-018 : Bundle Composition Section
     // ==========================================================
 
-    test('TC-018 | Shipping — should fill all shipping dimension fields', async () => {
+    test('TC-018 | Bundle Composition — should fill bundle type, price and out-of-stock checkbox', async () => {
 
         await comboProductPage.selectComboProductType();
 
-        await comboProductPage.lengthInput.fill('30');
-        await expect(comboProductPage.lengthInput).toHaveValue('30');
+        await expect(
+            comboProductPage.page.locator("h2:text('Bundle Composition')")
+        ).toBeVisible();
 
-        await comboProductPage.heightInput.fill('15');
-        await expect(comboProductPage.heightInput).toHaveValue('15');
+        // Bundle Type dropdown
+        await comboProductPage.selectFromDropdown(
+            comboProductPage.bundleTypeDropdown,
+            'Fixed Bundle'
+        );
+        await expect(comboProductPage.bundleTypeDropdown).toContainText('Fixed Bundle');
 
-        await comboProductPage.widthInput.fill('20');
-        await expect(comboProductPage.widthInput).toHaveValue('20');
+        // Bundle Price
+        await comboProductPage.bundlePriceInput.fill('350');
+        await expect(comboProductPage.bundlePriceInput).toHaveValue('350');
 
-        await comboProductPage.weightInput.fill('2.5');
-        await expect(comboProductPage.weightInput).toHaveValue('2.5');
+        // Allow Out-of-Stock Components checkbox
+        await comboProductPage.setCheckbox(
+            comboProductPage.allowOutOfStockComponentsCheckbox,
+            true
+        );
+        await expect(comboProductPage.allowOutOfStockComponentsCheckbox).toBeChecked();
 
-        console.log('✅ TC-018 Passed: Shipping dimension fields filled & verified');
+        console.log('TC-018 Passed: Bundle Composition fields filled & verified');
     });
+
 
     // ==========================================================
     // TC-019 : Tax Pricing Section
     // ==========================================================
 
-    test('TC-019 | Tax Pricing — should fill all tax pricing fields', async () => {
+     test('TC-019 | Tax Pricing — should fill discount type, discount value and auto calculate', async () => {
 
         await comboProductPage.selectComboProductType();
 
-        await comboProductPage.taxCostPriceInput.fill('90');
-        await expect(comboProductPage.taxCostPriceInput).toHaveValue('90');
+        await expect(
+            comboProductPage.page.locator("h2:text('Tax Pricing')")
+        ).toBeVisible();
 
-        await comboProductPage.taxSalePriceInput.fill('180');
-        await expect(comboProductPage.taxSalePriceInput).toHaveValue('180');
+        // Discount Type dropdown
+        await comboProductPage.selectFromDropdown(
+            comboProductPage.discountTypeDropdown,
+            'Percentage'
+        );
+        await expect(comboProductPage.discountTypeDropdown).toContainText('Percentage');
 
-        await comboProductPage.comparePriceInput.fill('220');
-        await expect(comboProductPage.comparePriceInput).toHaveValue('220');
+        // Discount Value
+        await comboProductPage.discountValueInput.fill('10');
+        await expect(comboProductPage.discountValueInput).toHaveValue('10');
 
-        await comboProductPage.lowStockAlertInput.fill('3');
-        await expect(comboProductPage.lowStockAlertInput).toHaveValue('3');
+        // Auto Calculate checkbox
+        await comboProductPage.setCheckbox(comboProductPage.autoCalculateCheckbox, true);
+        await expect(comboProductPage.autoCalculateCheckbox).toBeChecked();
 
-        console.log('✅ TC-019 Passed: Tax Pricing fields filled & verified');
+        console.log('TC-019 Passed: Tax Pricing (combo-specific) fields filled & verified');
     });
+
 
     // ==========================================================
     // TC-020 : Reset Button
@@ -664,32 +688,58 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
     // TC-024 : Combo Items — Add Item Button Visible After Type Select
     // ==========================================================
 
-    test('TC-024 | Combo Items — Add Item button should be visible after type selection', async () => {
+    test('TC-024 | Combo Products — search input should be visible after type selection', async () => {
 
         await comboProductPage.selectComboProductType();
 
-        await expect(comboProductPage.addComboItemButton).toBeVisible();
+        // Verify search input is visible (no Add Item button in actual UI)
+        await expect(comboProductPage.comboProductSearchInput).toBeVisible();
+        await expect(comboProductPage.comboProductSearchInput).toHaveAttribute(
+            'placeholder',
+            'Search product'
+        );
 
-        console.log('✅ TC-024 Passed: Add Item button is visible after Combo Product selected');
+        console.log('TC-024 Passed: Combo product search input is visible after type selection');
     });
 
     // ==========================================================
     // TC-025 : Combo Items — Quantity Input Accepts Decimals
     // ==========================================================
 
-    test('TC-025 | Combo Items — quantity input should accept positive numbers', async () => {
+    test('TC-025 | Combo Products — quantity stepper should increase count using + button', async () => {
 
-        await comboProductPage.selectComboProductType();
+            await comboProductPage.selectComboProductType();
 
-        await comboProductPage.addComboItemButton.click();
-        await comboProductPage.page.waitForTimeout(300);
+            // First add a product via search
+            await comboProductPage.comboProductSearchInput.fill(SINGLE_COMBO_ITEM.productName);
+            await comboProductPage.page.waitForTimeout(500);
 
-        await comboProductPage.comboItemQuantityInput.clear();
-        await comboProductPage.comboItemQuantityInput.fill('10');
-        await expect(comboProductPage.comboItemQuantityInput).toHaveValue('10');
+            const productOption = comboProductPage.page
+                .getByRole('option', { name: SINGLE_COMBO_ITEM.productName, exact: false })
+                .first();
 
-        console.log('✅ TC-025 Passed: Combo item quantity input accepts positive number');
+            await productOption.waitFor({ state: 'visible', timeout: 5000 });
+            await productOption.click();
+            await comboProductPage.page.waitForTimeout(300);
+
+            // Click + button twice on the added row
+            const lastRow    = comboProductPage.page.locator(
+                "h2:text('Combo Products') ~ div table tbody tr:not(:has(td[colspan]))"
+            ).last();
+
+            const plusButton = lastRow.locator('button:has-text("+")');
+            await plusButton.click();
+            await comboProductPage.page.waitForTimeout(100);
+            await plusButton.click();
+            await comboProductPage.page.waitForTimeout(100);
+
+            // Quantity should now be 3 (started at 1, clicked + twice)
+            const qtyCell = lastRow.locator('td:nth-child(4)');
+            await expect(qtyCell).toContainText('3');
+
+            console.log('TC-025 Passed: Combo item quantity stepper + button increases count correctly');
     });
+
 
     // ==========================================================
     // TC-026 : E2E Minimal — Save with Required Fields Only
