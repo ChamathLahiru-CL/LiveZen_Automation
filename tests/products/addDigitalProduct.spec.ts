@@ -127,7 +127,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         await expect(digitalProductPage.saveAndEditButton).toBeVisible();
         await expect(digitalProductPage.saveButton).toBeVisible();
 
-        console.log('✅ TC-001 Passed: Page loaded with all sections');
+        console.log('TC-001 Passed: Page loaded with all sections');
     });
 
     // ==========================================================
@@ -177,7 +177,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         await digitalProductPage.selectFromDropdown(digitalProductPage.statusDropdown, data.status!);
         await expect(digitalProductPage.statusDropdown).toContainText(data.status!);
 
-        console.log('✅ TC-002 Passed: General Information fields verified');
+        console.log('TC-002 Passed: General Information fields verified');
     });
 
     // ==========================================================
@@ -195,7 +195,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         expect(valueAfter).not.toBe('');
         expect(valueAfter.length).toBeGreaterThan(0);
 
-        console.log(`✅ TC-003 Passed: Code generated — before: "${valueBefore}", after: "${valueAfter}"`);
+        console.log(`TC-003 Passed: Code generated — before: "${valueBefore}", after: "${valueAfter}"`);
     });
 
     // ==========================================================
@@ -215,7 +215,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         await digitalProductPage.invoiceDescriptionEditor.fill(invoiceDesc);
         await expect(digitalProductPage.invoiceDescriptionEditor).toContainText(invoiceDesc);
 
-        console.log('✅ TC-004 Passed: Descriptions filled & verified');
+        console.log('TC-004 Passed: Descriptions filled & verified');
     });
 
     // ==========================================================
@@ -239,7 +239,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         });
 
         await digitalProductPage.page.waitForTimeout(500);
-        console.log('✅ TC-005 Passed: Media dropzone visible & mock image uploaded');
+        console.log('TC-005 Passed: Media dropzone visible & mock image uploaded');
     });
 
     // ==========================================================
@@ -257,7 +257,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         await digitalProductPage.alertQuantityInput.fill('10');
         await expect(digitalProductPage.alertQuantityInput).toHaveValue('10');
 
-        console.log('✅ TC-006 Passed: Pricing & Inventory fields filled & verified');
+        console.log('TC-006 Passed: Pricing & Inventory fields filled & verified');
     });
 
     // ==========================================================
@@ -284,7 +284,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         await digitalProductPage.selectFromDropdown(digitalProductPage.purchaseUnitDropdown, purchaseUnit);
         await expect(digitalProductPage.purchaseUnitDropdown).toContainText(purchaseUnit);
 
-        console.log('✅ TC-007 Passed: Optional pricing dropdowns selected & verified');
+        console.log('TC-007 Passed: Optional pricing dropdowns selected & verified');
     });
 
     // ==========================================================
@@ -307,7 +307,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         await digitalProductPage.setToggle(digitalProductPage.posVisibilityToggle, false);
         expect(await digitalProductPage.posVisibilityToggle.getAttribute('aria-checked')).toBe('false');
 
-        console.log('✅ TC-008 Passed: Visibility toggles verified');
+        console.log('TC-008 Passed: Visibility toggles verified');
     });
 
     // ==========================================================
@@ -328,7 +328,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
             await digitalProductPage.metaKeywordsInput.press('Enter');
         }
 
-        console.log('✅ TC-009 Passed: SEO fields filled & verified');
+        console.log('TC-009 Passed: SEO fields filled & verified');
     });
 
     // ==========================================================
@@ -356,7 +356,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         // Verify file upload dropzone is visible
         await expect(digitalProductPage.digitalFileDropzone).toBeVisible();
 
-        console.log('✅ TC-010 Passed: Digital Delivery fields filled & verified');
+        console.log('TC-010 Passed: Digital Delivery fields filled & verified');
     });
 
     // ==========================================================
@@ -371,7 +371,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         await digitalProductPage.setCheckbox(digitalProductPage.assignPerOrderCheckbox, false);
         await expect(digitalProductPage.assignPerOrderCheckbox).not.toBeChecked();
 
-        console.log('✅ TC-011 Passed: Assign per Order checkbox verified');
+        console.log('TC-011 Passed: Assign per Order checkbox verified');
     });
 
     // ==========================================================
@@ -390,7 +390,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         await digitalProductPage.setCheckbox(digitalProductPage.allowInstantAccessCheckbox, true);
         await expect(digitalProductPage.allowInstantAccessCheckbox).toBeChecked();
 
-        console.log('✅ TC-012 Passed: License Management fields filled & verified');
+        console.log('TC-012 Passed: License Management fields filled & verified');
     });
 
     // ==========================================================
@@ -417,7 +417,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         const expiryValue = await digitalProductPage.expiryDateInput.inputValue();
         expect(expiryValue).not.toBe('');
 
-        console.log(`✅ TC-013 Passed: Expiry date set → "${expiryValue}"`);
+        console.log(`TC-013 Passed: Expiry date set → "${expiryValue}"`);
     });
 
     // ==========================================================
@@ -432,7 +432,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         await digitalProductPage.comparePriceInput.fill('120');
         await expect(digitalProductPage.comparePriceInput).toHaveValue('120');
 
-        console.log('✅ TC-014 Passed: Tax Pricing fields filled & verified');
+        console.log('TC-014 Passed: Tax Pricing fields filled & verified');
     });
 
     // ==========================================================
@@ -452,7 +452,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         // Product name should be cleared
         await expect(digitalProductPage.productNameInput).toHaveValue('');
 
-        console.log('✅ TC-015 Passed: Reset button cleared the form');
+        console.log('TC-015 Passed: Reset button cleared the form');
     });
 
     // ==========================================================
@@ -467,7 +467,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         // Page should stay on create — no redirect
         await expect(digitalProductPage.page).toHaveURL(/\/products\/create/);
 
-        console.log('✅ TC-016 Passed: Form blocked submission with empty required fields');
+        console.log('TC-016 Passed: Form blocked submission with empty required fields');
     });
 
     // ==========================================================
@@ -483,7 +483,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         const url = digitalProductPage.page.url();
         expect(url).not.toContain('/products/create');
 
-        console.log('✅ TC-017 Passed: Minimal digital product saved successfully');
+        console.log('TC-017 Passed: Minimal digital product saved successfully');
     });
 
     // ==========================================================
@@ -499,7 +499,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         const url = digitalProductPage.page.url();
         expect(url).not.toContain('/products/create');
 
-        console.log('✅ TC-018 Passed: Full digital product E2E workflow completed');
+        console.log('TC-018 Passed: Full digital product E2E workflow completed');
     });
 
     // ==========================================================
@@ -519,7 +519,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         // Should redirect to product edit page
         expect(url).toMatch(/\/products\/\d+\/edit|\/products\/edit/);
 
-        console.log('✅ TC-019 Passed: Save and Edit redirected to edit page');
+        console.log('TC-019 Passed: Save and Edit redirected to edit page');
     });
 
     // ==========================================================
@@ -534,7 +534,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         const slugHint = page.locator('p:has-text("Lowercase letters, numbers, and hyphens allowed")');
         await expect(slugHint).toBeVisible();
 
-        console.log('✅ TC-020 Passed: Slug validation hint visible');
+        console.log('TC-020 Passed: Slug validation hint visible');
     });
 
     // ==========================================================
@@ -554,7 +554,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         const expiryValue = await digitalProductPage.fileExpiryInput.inputValue();
         expect(expiryValue).toBe('');
 
-        console.log('✅ TC-021 Passed: Numeric inputs rejected non-numeric values');
+        console.log('TC-021 Passed: Numeric inputs rejected non-numeric values');
     });
 
     // ==========================================================
@@ -569,7 +569,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         );
         await expect(digitalProductPage.barcodeSymbologyDropdown).toContainText('CODE128');
 
-        console.log('✅ TC-022 Passed: Barcode symbology selected & verified');
+        console.log('TC-022 Passed: Barcode symbology selected & verified');
     });
 
     // ==========================================================
@@ -580,7 +580,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
 
         await expect(digitalProductPage.allowInstantAccessCheckbox).not.toBeChecked();
 
-        console.log('✅ TC-023 Passed: Allow Instant Access is unchecked by default');
+        console.log('TC-023 Passed: Allow Instant Access is unchecked by default');
     });
 
     // ==========================================================
@@ -591,7 +591,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
 
         await expect(digitalProductPage.assignPerOrderCheckbox).not.toBeChecked();
 
-        console.log('✅ TC-024 Passed: Assign Per Order is unchecked by default');
+        console.log('TC-024 Passed: Assign Per Order is unchecked by default');
     });
 
     // ==========================================================
@@ -606,6 +606,6 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         expect(webState).toBe('true');
         expect(posState).toBe('true');
 
-        console.log('✅ TC-025 Passed: Visibility toggles are ON by default');
+        console.log('TC-025 Passed: Visibility toggles are ON by default');
     });
 });
