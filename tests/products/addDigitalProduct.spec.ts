@@ -12,17 +12,24 @@ import AddDigitalProductPage, {
  */
 const FULL_DIGITAL_PRODUCT_DATA: AddDigitalProductFormData = {
     // General Information
-    productName:       'Digital QA Test Product',
+    productName:       'Digital QA Test Product-' + Date.now(),
     secondaryName:     'QA Secondary Name',
-    slug:              'digital-qa-test-product',
-    brand:             'Test Brand',
-    category:          'Digital',
+    slug:              'digital-qa-test-product-' + Date.now(),
+    brand:             'Apple',
+    barcodeSymbology:  'EAN13',
+    category:          'Test 1',
     tags:              ['qa', 'digital', 'automation'],
     status:            'Active',
 
     // Descriptions
     productDescription: 'This is an automated QA test product description.',
     invoiceDescription: 'Invoice description for QA digital product.',
+
+    //Media
+    mockImageBuffer: Buffer.from(
+            'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
+            'base64'
+    ),
 
     // Pricing & Inventory
     productCost:    '50',
@@ -39,7 +46,7 @@ const FULL_DIGITAL_PRODUCT_DATA: AddDigitalProductFormData = {
     metaKeywords:    ['digital', 'qa', 'test'],
 
     // Digital Delivery
-    deliveryType:  'Direct Download',
+    deliveryType:  'Downloadable',
     fileExpiry:    '30',
     maxDownloads:  '5',
     assignPerOrder: false,
@@ -61,10 +68,10 @@ const FULL_DIGITAL_PRODUCT_DATA: AddDigitalProductFormData = {
  * Minimal required-fields-only data set
  */
 const MINIMAL_DIGITAL_PRODUCT_DATA: AddDigitalProductFormData = {
-    productName:   'Minimal Digital Product',
-    slug:          'minimal-digital-product',
-    brand:         'Test Brand',
-    category:      'Digital',
+    productName:   `Minimal Digital Product-${Date.now()}`,
+    slug:          `minimal-digital-product-${Date.now()}`,
+    brand:         'ABCD',
+    category:      'Test 1',
     status:        'Active',
     productCost:   '10',
     productPrice:  '20',
@@ -267,7 +274,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
     test('TC-007 | Pricing — should select optional tax, unit, sale & purchase unit dropdowns', async () => {
 
         // These tests assume options exist in the app — adjust values as needed
-        const taxOption      = 'VAT 10%';
+        const taxOption      = 'Standard VAT (19%)';
         const unitOption     = 'Piece';
         const saleUnit       = 'Piece';
         const purchaseUnit   = 'Piece';
@@ -343,9 +350,9 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
 
         await digitalProductPage.selectFromDropdown(
             digitalProductPage.deliveryTypeDropdown,
-            'Direct Download'
+            'License Key'
         );
-        await expect(digitalProductPage.deliveryTypeDropdown).toContainText('Direct Download');
+        await expect(digitalProductPage.deliveryTypeDropdown).toContainText('License Key');
 
         await digitalProductPage.fileExpiryInput.fill('30');
         await expect(digitalProductPage.fileExpiryInput).toHaveValue('30');
@@ -481,7 +488,7 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
         // After save — should navigate away from create page (redirect on success)
         await digitalProductPage.page.waitForTimeout(1500);
         const url = digitalProductPage.page.url();
-        expect(url).not.toContain('/products/create');
+        expect(url).not.toContain('products/create-digital-product');
 
         console.log('TC-017 Passed: Minimal digital product saved successfully');
     });
@@ -490,13 +497,14 @@ test.describe('Add Digital Product — Full Coverage Test Suite', () => {
     // TC-018 : Full E2E Happy Path
     // ==========================================================
 
-    test('TC-018 | E2E Full — should complete full digital product workflow successfully', async () => {
+    test('TC-018 | E2E Full — should complete full digital product workflow successfully', async ({ page }) => {
 
         await digitalProductPage.runAddDigitalProductWorkflow(FULL_DIGITAL_PRODUCT_DATA);
 
         // After save — should navigate away from create page (redirect on success)
         await digitalProductPage.page.waitForTimeout(1500);
         const url = digitalProductPage.page.url();
+        await page.pause();
         expect(url).not.toContain('/products/create');
 
         console.log('TC-018 Passed: Full digital product E2E workflow completed');

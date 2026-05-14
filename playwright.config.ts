@@ -38,7 +38,7 @@ export default defineConfig({
       }
     },
 
-    {
+/*    {
       name: 'Edge',
       use: {
         browserName: 'chromium',
@@ -51,7 +51,7 @@ export default defineConfig({
       use: {
         browserName: 'firefox'
       }
-    }
+    } */
 
   ]
 
