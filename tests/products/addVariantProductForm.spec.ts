@@ -5,6 +5,26 @@ import AddProductPage, { AddProductFormData } from '../../pages/product/AddVaria
 // TEST DATA
 // ============================================================
 
+// TEMP: random number generator (100-200) for testing only. Remove after testing.
+const tempMin = 100;
+const tempMax = 200;
+const nextTempNumber = () => Math.floor(Math.random() * (tempMax - tempMin + 1)) + tempMin;
+const formatTempProductCode = (num: number) => `PROD${String(num).padStart(5, '0')}`;
+
+const fillVariantBasics = async (productPage: AddProductPage, tempNum: number) => {
+    await productPage.selectFromDropdown(productPage.productTypeDropdown, 'Variant Product');
+    await productPage.productCodeInput.fill(formatTempProductCode(tempNum));
+    await productPage.productNameInput.fill(`variant-${tempNum}`);
+    await productPage.slugInput.fill(`variant-${tempNum}`);
+    await productPage.selectFromDropdown(productPage.brandDropdown, 'ABCD');
+    await productPage.selectFromDropdown(productPage.categoryDropdown, 'Test 1 -> uim2');
+    await productPage.categoryDropdown.click();
+    await productPage.selectFromDropdown(productPage.statusDropdown, 'Active');
+    await productPage.productCostInput.fill('90');
+    await productPage.productPriceInput.fill('180');
+    await productPage.alertQuantityInput.fill('5');
+};
+
 const SINGLE_PRODUCT: AddProductFormData = {
     // General Information
     productType:      'Single Product',
@@ -72,68 +92,72 @@ const SINGLE_PRODUCT: AddProductFormData = {
     action: 'save',
 };
 
-const VARIANT_PRODUCT: AddProductFormData = {
-    // General Information
-    productType:      'Variant Product',
-    productCode:     `PROD00035`,
-    generateAutoCode: true,
-    productName:      `test-${Date.now()}`,
-    secondaryName:    'test123',
-    slug:             `test-${Date.now()}`,
-    brand:            'ABCD',
-    category:         'Test 1 -> uim2',
-    tags:             ['adidas', 'variant', 'boost'],
-    status:           'Active',
+const createVariantProduct = (): AddProductFormData => {
+    const tempNum = nextTempNumber();
 
-    // Descriptions
-    productDescription: 'Adidas Ultra Boost with multiple variant options.',
-    invoiceDescription: 'Adidas Ultra Boost',
+    return {
+        // General Information
+        productType:      'Variant Product',
+        productCode:      formatTempProductCode(tempNum),
+        generateAutoCode: true,
+        productName:      `test-${tempNum}`,
+        secondaryName:    'test123',
+        slug:             `test-${tempNum}`,
+        brand:            'ABCD',
+        category:         'Test 1 -> uim2',
+        tags:             ['adidas', 'variant', 'boost'],
+        status:           'Active',
 
-    // Mock image
-    mockImageBuffer: Buffer.from(
-        'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
-        'base64'
-    ),
+        // Descriptions
+        productDescription: 'Adidas Ultra Boost with multiple variant options.',
+        invoiceDescription: 'Adidas Ultra Boost',
 
-    // Pricing & Inventory
-    productCost:   '90',
-    productPrice:  '180',
-    alertQuantity: '5',
+        // Mock image
+        mockImageBuffer: Buffer.from(
+            'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
+            'base64'
+        ),
 
-    // Visibility
-    webVisibility: true,
-    posVisibility: false,
+        // Pricing & Inventory
+        productCost:   '90',
+        productPrice:  '180',
+        alertQuantity: '5',
 
-    // Variant Options
-    variantColor:    true,
-    variantSize:     true,
-    variantMaterial: false,
-    variantPattern:  false,
-    variantStyle:    false,
+        // Visibility
+        webVisibility: true,
+        posVisibility: false,
 
-    // Inventory
-    sku:             `AD-UB-${Date.now()}`,
-    barcode:         '1234567890123',
-    quantity:        '100',
-    manageInventory: true,
-    stockTracking:   true,
-    allowBackorder:  false,
+        // Variant Options
+        variantColor:    true,
+        variantSize:     true,
+        variantMaterial: false,
+        variantPattern:  false,
+        variantStyle:    false,
 
-    // Shipping
-    length: '30',
-    height: '12',
-    width:  '20',
-    weight: '1.2',
+        // Inventory
+        sku:             `AD-UB-${tempNum}`,
+        barcode:         '1234567890123',
+        quantity:        '100',
+        manageInventory: true,
+        stockTracking:   true,
+        allowBackorder:  false,
 
-    // Tax Pricing
-    taxCostPrice: '90',
-    taxSalePrice: '180',
-    comparePrice: '210',
+        // Shipping
+        length: '30',
+        height: '12',
+        width:  '20',
+        weight: '1.2',
 
-    //low stock alert
-    lowStockAlert: '5',
-    // Action
-    action: 'save',
+        // Tax Pricing
+        taxCostPrice: '90',
+        taxSalePrice: '180',
+        comparePrice: '210',
+
+        //low stock alert
+        lowStockAlert: '5',
+        // Action
+        action: 'save',
+    };
 };
 
 const SAVE_AND_EDIT_PRODUCT: AddProductFormData = {
@@ -184,7 +208,7 @@ test.describe('Add Product - E2E Workflow Tests Variant Products', () => {
 
     test('TC_02 | Variant Product | Fill all sections with Variant Options & Save', async ({ page }) => {
 
-        await productPage.runAddProductWorkflow(VARIANT_PRODUCT);
+        await productPage.runAddProductWorkflow(createVariantProduct());
 
         //await expect(page).not.toHaveURL("https://app.livezencloud.com/products/create");
         await page.pause();
@@ -402,5 +426,140 @@ test.describe('Add Product - E2E Workflow Tests Variant Products', () => {
 
         await expect(page).not.toHaveURL("https://app.livezencloud.com/products/create");
         console.log('✅ TC_10 Passed: Variant Product with all 5 variant options created');
+    });
+
+    // ──────────────────────────────────────────────────────────
+    // TEST 11: Variant SKU input appears after selecting options
+    // ──────────────────────────────────────────────────────────
+
+    test('TC_11 | Variant Product | Variant SKU input appears', async ({ page }) => {
+
+        const tempNum = nextTempNumber();
+        await fillVariantBasics(productPage, tempNum);
+
+        await productPage.setCheckbox(productPage.variantColorCheckbox, true);
+        await productPage.setCheckbox(productPage.variantSizeCheckbox, true);
+
+        const variantSku = `VAR-SKU-${tempNum}`;
+        await expect(productPage.variantSKUInput).toBeVisible();
+        await productPage.variantSKUInput.fill(variantSku);
+        await expect(productPage.variantSKUInput).toHaveValue(variantSku);
+    });
+
+    // ──────────────────────────────────────────────────────────
+    // TEST 12: Add Variant adds a new row
+    // ──────────────────────────────────────────────────────────
+
+    test('TC_12 | Variant Product | Add Variant adds row', async ({ page }) => {
+
+        const tempNum = nextTempNumber();
+        await fillVariantBasics(productPage, tempNum);
+
+        await productPage.setCheckbox(productPage.variantColorCheckbox, true);
+        await productPage.setCheckbox(productPage.variantSizeCheckbox, true);
+
+        const skuInputs = page.locator('input[placeholder="Enter SKU"]');
+        const initialCount = await skuInputs.count();
+
+        await page.getByRole('button', { name: 'Add Variant' }).click();
+        await expect(skuInputs).toHaveCount(initialCount + 1);
+    });
+
+    // ──────────────────────────────────────────────────────────
+    // TEST 13: Variant Product - SEO fields
+    // ──────────────────────────────────────────────────────────
+
+    test('TC_13 | Variant Product | Fill SEO fields', async ({ page }) => {
+
+        const tempNum = nextTempNumber();
+        await fillVariantBasics(productPage, tempNum);
+
+        const metaTitle = `Variant Meta Title ${tempNum}`;
+        const metaDescription = `Variant Meta Description ${tempNum}`;
+
+        await productPage.metaTitleInput.fill(metaTitle);
+        await expect(productPage.metaTitleInput).toHaveValue(metaTitle);
+
+        await productPage.metaDescriptionInput.fill(metaDescription);
+        await expect(productPage.metaDescriptionInput).toHaveValue(metaDescription);
+
+        await productPage.metaKeywordsInput.fill('variant');
+        await productPage.metaKeywordsInput.press('Enter');
+        await productPage.metaKeywordsInput.fill('seo');
+        await productPage.metaKeywordsInput.press('Enter');
+    });
+
+    // ──────────────────────────────────────────────────────────
+    // TEST 14: Variant Product - Visibility toggles
+    // ──────────────────────────────────────────────────────────
+
+    test('TC_14 | Variant Product | Visibility toggles', async ({ page }) => {
+
+        const tempNum = nextTempNumber();
+        await fillVariantBasics(productPage, tempNum);
+
+        await productPage.setToggle(productPage.webVisibilityToggle, false);
+        await productPage.setToggle(productPage.posVisibilityToggle, false);
+
+        await expect(productPage.webVisibilityToggle).toHaveAttribute('aria-checked', 'false');
+        await expect(productPage.posVisibilityToggle).toHaveAttribute('aria-checked', 'false');
+    });
+
+    // ──────────────────────────────────────────────────────────
+    // TEST 15: Variant Product - Shipping & Tax Pricing fields
+    // ──────────────────────────────────────────────────────────
+
+    test('TC_15 | Variant Product | Shipping & Tax Pricing fields', async ({ page }) => {
+
+        const tempNum = nextTempNumber();
+        await fillVariantBasics(productPage, tempNum);
+
+        await productPage.lengthInput.fill('31');
+        await productPage.heightInput.fill('16');
+        await productPage.widthInput.fill('21');
+        await productPage.weightInput.fill('1.8');
+
+        await expect(productPage.lengthInput).toHaveValue(/31/);
+        await expect(productPage.heightInput).toHaveValue(/16/);
+        await expect(productPage.widthInput).toHaveValue(/21/);
+        await expect(productPage.weightInput).toHaveValue(/1.8/);
+
+        await productPage.taxCostPriceInput.fill('90');
+        await productPage.taxSalePriceInput.fill('180');
+        await productPage.comparePriceInput.fill('210');
+        await productPage.discountRulesTextarea.fill('[{"min_qty": 2, "discount": 3}]');
+        await productPage.lowStockAlertInput.fill('6');
+
+        await expect(productPage.taxCostPriceInput).toHaveValue(/90/);
+        await expect(productPage.taxSalePriceInput).toHaveValue(/180/);
+        await expect(productPage.comparePriceInput).toHaveValue(/210/);
+        await expect(productPage.discountRulesTextarea).toHaveValue('[{"min_qty": 2, "discount": 3}]');
+        await expect(productPage.lowStockAlertInput).toHaveValue(/6/);
+    });
+
+    // ──────────────────────────────────────────────────────────
+    // TEST 16: Variant Product - Inventory fields
+    // ──────────────────────────────────────────────────────────
+
+    test('TC_16 | Variant Product | Inventory fields', async ({ page }) => {
+
+        const tempNum = nextTempNumber();
+        await fillVariantBasics(productPage, tempNum);
+
+        const sku = `INV-${tempNum}`;
+        await productPage.skuInput.fill(sku);
+        await productPage.barcodeInput.fill('1122334455667');
+        await productPage.quantityInput.fill('120');
+
+        await productPage.setCheckbox(productPage.manageInventoryCheckbox, true);
+        await productPage.setCheckbox(productPage.allowBackorderCheckbox, true);
+        await productPage.setCheckbox(productPage.stockTrackingCheckbox, true);
+
+        await expect(productPage.skuInput).toHaveValue(sku);
+        await expect(productPage.barcodeInput).toHaveValue('1122334455667');
+        await expect(productPage.quantityInput).toHaveValue(/120/);
+        await expect(productPage.manageInventoryCheckbox).toBeChecked();
+        await expect(productPage.allowBackorderCheckbox).toBeChecked();
+        await expect(productPage.stockTrackingCheckbox).toBeChecked();
     });
 });
