@@ -44,18 +44,18 @@ const FULL_COMBO_PRODUCT_DATA: AddComboProductFormData = {
 
     // Combo Items
      comboItems: [
-        { productName: 'Product A', quantity: 2 },
-        { productName: 'Product B', quantity: 1 },
+        { productName: 'Samsung galaxy', quantity: 2 },
+        { productName: 'Test Product 02', quantity: 1 },
     ],
 
         // Bundle Composition
-    bundleType:                'Fixed Bundle',
+    bundleType:                'Fixed Price',
     bundlePrice:               '350',
     allowOutOfStockComponents: false,
 
     // Inventory (Combo-specific)
     quantity:        '50',
-    inventoryMode:   'Track Bundle',
+    inventoryMode:   'Reserve from Components',
     bundleSku:       'BUNDLE-QA-001',
     manageInventory: true,
 
@@ -75,12 +75,17 @@ const MINIMAL_COMBO_PRODUCT_DATA: AddComboProductFormData = {
     productType:   'Combo Product',
     productName:   'Minimal Combo Product'+new Date().getTime(),
     slug:          'minimal-combo-product',
-    brand:         'Test Brand',
-    category:      'Combo',
+    brand:         'Test 1',
+    category:      'Test 1',
     status:        'Active',
     productCost:   '20',
     productPrice:  '40',
     alertQuantity: '2',
+    comboItems: [
+        { productName: '24 Inch Monitor 55', quantity: 2 },        
+    ],
+    bundleType:                'Fixed Price',
+    bundlePrice:               '350',
     action:        'save',
 };
 
@@ -755,13 +760,14 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
     // TC-026 : E2E Minimal — Save with Required Fields Only
     // ==========================================================
 
-    test('TC-026 | E2E Minimal — should save combo product with required fields only', async () => {
+    test('TC-026 | E2E Minimal — should save combo product with required fields only', async ({page}) => {
 
         await comboProductPage.runAddComboProductWorkflow(MINIMAL_COMBO_PRODUCT_DATA);
 
         await comboProductPage.page.waitForTimeout(1500);
+        await  page.pause();
         const url = comboProductPage.page.url();
-        expect(url).not.toContain('/products/create');
+        expect(url).not.toContain('https://app.livezencloud.com/products/create');
 
         console.log('✅ TC-026 Passed: Minimal combo product saved successfully');
     });
@@ -769,22 +775,23 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
     // ==========================================================
     // TC-027 : E2E Full Happy Path
     // ==========================================================
-
-    test('TC-027 | E2E Full — should complete full combo product workflow successfully', async () => {
+    // Not working have some bug in there
+    test('TC-027 | E2E Full — should complete full combo product workflow successfully', async ({page}) => {
 
         await comboProductPage.runAddComboProductWorkflow(FULL_COMBO_PRODUCT_DATA);
 
         await comboProductPage.page.waitForTimeout(1500);
         const url = comboProductPage.page.url();
-        expect(url).not.toContain('/products/create');
+        await  page.pause();
+        expect(url).not.toContain('https://app.livezencloud.com/products/create');
 
-        console.log('✅ TC-027 Passed: Full combo product E2E workflow completed');
+        console.log('TC-027 Passed: Full combo product E2E workflow completed');
     });
 
     // ==========================================================
     // TC-028 : Save and Edit Action
     // ==========================================================
-
+    // Not working have some bug in there
     test('TC-028 | Action — Save and Edit should redirect to product edit page', async () => {
 
         await comboProductPage.runAddComboProductWorkflow({
@@ -796,7 +803,7 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
         const url = comboProductPage.page.url();
         expect(url).toMatch(/\/products\/\d+\/edit|\/products\/edit/);
 
-        console.log('✅ TC-028 Passed: Save and Edit redirected to edit page');
+        console.log('TC-028 Passed: Save and Edit redirected to edit page');
     });
 
     // ==========================================================
@@ -807,8 +814,11 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
 
         await comboProductPage.productTypeDropdown.click();
 
+        const searchInput = page.getByRole('textbox', { name: 'Search options...' });
+        await expect(searchInput).toBeVisible();
+
         const expectedTypes = [
-            'Standard Product',
+            'Single Product',
             'Variant Product',
             'Combo Product',
             'Digital Product',

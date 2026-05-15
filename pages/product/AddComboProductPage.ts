@@ -629,9 +629,13 @@ private async fillGeneralInformation(data: AddComboProductFormData) {
     private async fillInventory(data: AddComboProductFormData): Promise<void> {
 
         // Verify section is visible
-        await expect(
-            this.page.locator("h2:text('Inventory')")
-        ).toBeVisible();
+        const inventoryHeading = this.page.getByRole('heading', {
+            level: 2,
+            name: /^Inventory$/,
+        });
+
+        await inventoryHeading.scrollIntoViewIfNeeded();
+        await expect(inventoryHeading).toBeVisible();
 
         if (data.quantity) {
             await this.quantityInput.fill(data.quantity);
