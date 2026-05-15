@@ -832,29 +832,29 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
         // Close dropdown
         await page.keyboard.press('Escape');
 
-        console.log('✅ TC-029 Passed: All product type options visible in dropdown');
+        console.log('TC-029 Passed: All product type options visible in dropdown');
     });
 
     // ==========================================================
     // TC-030 : Sections Hidden for Non-Combo Types After Switch
     // ==========================================================
 
-    test('TC-030 | Product Type — switching away from Combo should hide Combo Items section', async ({ page }) => {
+    test('TC-030 | Product Type — switching away from Combo should hide Combo Products section', async ({ page }) => {
 
         // First select Combo
         await comboProductPage.selectComboProductType();
-        await expect(page.locator("h2:text('Combo Items')")).toBeVisible();
+        await expect(page.locator("h2:text('Combo Products')")).toBeVisible();
 
         // Switch to Standard Product
         await comboProductPage.selectFromDropdown(
             comboProductPage.productTypeDropdown,
-            'Standard Product'
+            'Single Product'
         );
         await comboProductPage.page.waitForTimeout(400);
 
-        // Combo Items section should now be hidden
-        await expect(page.locator("h2:text('Combo Items')")).not.toBeVisible();
+        // Combo Products section should now be hidden
+        await expect(page.locator("h2:text('Combo Products')")).not.toBeVisible();
 
-        console.log('✅ TC-030 Passed: Combo Items section hidden after switching product type');
+        console.log('TC-030 Passed: Combo Products section hidden after switching product type');
     });
 });
