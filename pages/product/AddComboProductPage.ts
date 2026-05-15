@@ -568,7 +568,7 @@ private async fillGeneralInformation(data: AddComboProductFormData) {
             if (item.quantity && item.quantity > 1) {
                 const rows       = this.page.locator("h2:text('Combo Products') ~ div table tbody tr");
                 const lastRow    = rows.last();
-                const plusButton = lastRow.locator('button:has-text("+")');
+                const plusButton = lastRow.locator('button[aria-label^="Increase quantity"]');
 
                 // Click + button (quantity - 1) times (starts at 1)
                 const clickCount = item.quantity - 1;

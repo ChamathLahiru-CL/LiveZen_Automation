@@ -689,7 +689,7 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
         );
         await expect(slugHint).toBeVisible();
 
-        console.log('✅ TC-023 Passed: Slug validation hint visible');
+        console.log('TC-023 Passed: Slug validation hint visible');
     });
 
     // ==========================================================
@@ -735,15 +735,17 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
                 "h2:text('Combo Products') ~ div table tbody tr:not(:has(td[colspan]))"
             ).last();
 
-            const plusButton = lastRow.locator('button:has-text("+")');
+            const plusButton = lastRow.locator('button[aria-label^="Increase quantity"]');
             await plusButton.click();
             await comboProductPage.page.waitForTimeout(100);
             await plusButton.click();
             await comboProductPage.page.waitForTimeout(100);
 
             // Quantity should now be 3 (started at 1, clicked + twice)
-            const qtyCell = lastRow.locator('td:nth-child(4)');
-            await expect(qtyCell).toContainText('3');
+            const qtyInput = lastRow.getByRole('spinbutton', {
+                name: new RegExp(`^Quantity for ${SINGLE_COMBO_ITEM.productName}$`),
+            });
+            await expect(qtyInput).toHaveValue('3');
 
             console.log('TC-025 Passed: Combo item quantity stepper + button increases count correctly');
     });
