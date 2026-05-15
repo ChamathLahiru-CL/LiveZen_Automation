@@ -568,7 +568,7 @@ private async fillGeneralInformation(data: AddComboProductFormData) {
             if (item.quantity && item.quantity > 1) {
                 const rows       = this.page.locator("h2:text('Combo Products') ~ div table tbody tr");
                 const lastRow    = rows.last();
-                const plusButton = lastRow.locator('button:has-text("+")');
+                const plusButton = lastRow.locator('button[aria-label^="Increase quantity"]');
 
                 // Click + button (quantity - 1) times (starts at 1)
                 const clickCount = item.quantity - 1;
@@ -629,9 +629,13 @@ private async fillGeneralInformation(data: AddComboProductFormData) {
     private async fillInventory(data: AddComboProductFormData): Promise<void> {
 
         // Verify section is visible
-        await expect(
-            this.page.locator("h2:text('Inventory')")
-        ).toBeVisible();
+        const inventoryHeading = this.page.getByRole('heading', {
+            level: 2,
+            name: /^Inventory$/,
+        });
+
+        await inventoryHeading.scrollIntoViewIfNeeded();
+        await expect(inventoryHeading).toBeVisible();
 
         if (data.quantity) {
             await this.quantityInput.fill(data.quantity);

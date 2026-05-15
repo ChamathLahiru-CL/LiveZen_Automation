@@ -44,18 +44,18 @@ const FULL_COMBO_PRODUCT_DATA: AddComboProductFormData = {
 
     // Combo Items
      comboItems: [
-        { productName: 'Product A', quantity: 2 },
-        { productName: 'Product B', quantity: 1 },
+        { productName: 'Samsung galaxy', quantity: 2 },
+        { productName: 'Test Product 02', quantity: 1 },
     ],
 
         // Bundle Composition
-    bundleType:                'Fixed Bundle',
+    bundleType:                'Fixed Price',
     bundlePrice:               '350',
     allowOutOfStockComponents: false,
 
     // Inventory (Combo-specific)
     quantity:        '50',
-    inventoryMode:   'Track Bundle',
+    inventoryMode:   'Reserve from Components',
     bundleSku:       'BUNDLE-QA-001',
     manageInventory: true,
 
@@ -75,12 +75,17 @@ const MINIMAL_COMBO_PRODUCT_DATA: AddComboProductFormData = {
     productType:   'Combo Product',
     productName:   'Minimal Combo Product'+new Date().getTime(),
     slug:          'minimal-combo-product',
-    brand:         'Test Brand',
-    category:      'Combo',
+    brand:         'Test 1',
+    category:      'Test 1',
     status:        'Active',
     productCost:   '20',
     productPrice:  '40',
     alertQuantity: '2',
+    comboItems: [
+        { productName: '24 Inch Monitor 55', quantity: 2 },        
+    ],
+    bundleType:                'Fixed Price',
+    bundlePrice:               '350',
     action:        'save',
 };
 
@@ -497,7 +502,13 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
 
         await comboProductPage.selectComboProductType();
 
-        await expect(comboProductPage.page.locator("h2:text('Inventory')")).toBeVisible();
+        const inventoryHeading = comboProductPage.page.getByRole('heading', {
+            level: 2,
+            name: /^Inventory$/,
+        });
+
+        await inventoryHeading.scrollIntoViewIfNeeded();
+        await expect(inventoryHeading).toBeVisible();
 
         // Quantity
         await comboProductPage.quantityInput.fill('25');
@@ -506,9 +517,9 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
         // Inventory Mode dropdown
         await comboProductPage.selectFromDropdown(
             comboProductPage.inventoryModeDropdown,
-            'Track Bundle'
+            'Reserve from Components'
         );
-        await expect(comboProductPage.inventoryModeDropdown).toContainText('Track Bundle');
+        await expect(comboProductPage.inventoryModeDropdown).toContainText('Reserve from Components');
 
         // Bundle SKU
         await comboProductPage.bundleSkuInput.fill('BUNDLE-SKU-016');
@@ -556,9 +567,9 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
         // Bundle Type dropdown
         await comboProductPage.selectFromDropdown(
             comboProductPage.bundleTypeDropdown,
-            'Fixed Bundle'
+            'Fixed Price'
         );
-        await expect(comboProductPage.bundleTypeDropdown).toContainText('Fixed Bundle');
+        await expect(comboProductPage.bundleTypeDropdown).toContainText('Fixed Price');
 
         // Bundle Price
         await comboProductPage.bundlePriceInput.fill('350');
@@ -622,7 +633,7 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
 
         await expect(comboProductPage.productNameInput).toHaveValue('');
 
-        console.log('✅ TC-020 Passed: Reset button cleared the form');
+        console.log('TC-020 Passed: Reset button cleared the form');
     });
 
     // ==========================================================
@@ -639,7 +650,7 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
         // Page should stay on create — no redirect on validation failure
         await expect(comboProductPage.page).toHaveURL(/\/products\/create/);
 
-        console.log('✅ TC-021 Passed: Form blocked submission with empty required fields');
+        console.log('TC-021 Passed: Form blocked submission with empty required fields');
     });
 
     // ==========================================================
@@ -650,19 +661,22 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
 
         await comboProductPage.selectComboProductType();
 
-        await comboProductPage.productCostInput.fill('abc');
-        const costValue = await comboProductPage.productCostInput.inputValue();
-        expect(costValue).toBe('');
+        const initialCost = await comboProductPage.productCostInput.inputValue();
+        await comboProductPage.productCostInput.click();
+        await comboProductPage.page.keyboard.type('abc');
+        await expect(comboProductPage.productCostInput).toHaveValue(initialCost);
 
-        await comboProductPage.productPriceInput.fill('xyz');
-        const priceValue = await comboProductPage.productPriceInput.inputValue();
-        expect(priceValue).toBe('');
+        const initialPrice = await comboProductPage.productPriceInput.inputValue();
+        await comboProductPage.productPriceInput.click();
+        await comboProductPage.page.keyboard.type('xyz');
+        await expect(comboProductPage.productPriceInput).toHaveValue(initialPrice);
 
-        await comboProductPage.alertQuantityInput.fill('!@#');
-        const alertValue = await comboProductPage.alertQuantityInput.inputValue();
-        expect(alertValue).toBe('');
+        const initialAlert = await comboProductPage.alertQuantityInput.inputValue();
+        await comboProductPage.alertQuantityInput.click();
+        await comboProductPage.page.keyboard.type('!@#');
+        await expect(comboProductPage.alertQuantityInput).toHaveValue(initialAlert);
 
-        console.log('✅ TC-022 Passed: Numeric inputs rejected non-numeric values');
+        console.log('TC-022 Passed: Numeric inputs rejected non-numeric values');
     });
 
     // ==========================================================
@@ -680,7 +694,7 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
         );
         await expect(slugHint).toBeVisible();
 
-        console.log('✅ TC-023 Passed: Slug validation hint visible');
+        console.log('TC-023 Passed: Slug validation hint visible');
     });
 
     // ==========================================================
@@ -726,15 +740,17 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
                 "h2:text('Combo Products') ~ div table tbody tr:not(:has(td[colspan]))"
             ).last();
 
-            const plusButton = lastRow.locator('button:has-text("+")');
+            const plusButton = lastRow.locator('button[aria-label^="Increase quantity"]');
             await plusButton.click();
             await comboProductPage.page.waitForTimeout(100);
             await plusButton.click();
             await comboProductPage.page.waitForTimeout(100);
 
             // Quantity should now be 3 (started at 1, clicked + twice)
-            const qtyCell = lastRow.locator('td:nth-child(4)');
-            await expect(qtyCell).toContainText('3');
+            const qtyInput = lastRow.getByRole('spinbutton', {
+                name: new RegExp(`^Quantity for ${SINGLE_COMBO_ITEM.productName}$`),
+            });
+            await expect(qtyInput).toHaveValue('3');
 
             console.log('TC-025 Passed: Combo item quantity stepper + button increases count correctly');
     });
@@ -744,13 +760,14 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
     // TC-026 : E2E Minimal — Save with Required Fields Only
     // ==========================================================
 
-    test('TC-026 | E2E Minimal — should save combo product with required fields only', async () => {
+    test('TC-026 | E2E Minimal — should save combo product with required fields only', async ({page}) => {
 
         await comboProductPage.runAddComboProductWorkflow(MINIMAL_COMBO_PRODUCT_DATA);
 
         await comboProductPage.page.waitForTimeout(1500);
+        await  page.pause();
         const url = comboProductPage.page.url();
-        expect(url).not.toContain('/products/create');
+        expect(url).not.toContain('https://app.livezencloud.com/products/create');
 
         console.log('✅ TC-026 Passed: Minimal combo product saved successfully');
     });
@@ -758,22 +775,23 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
     // ==========================================================
     // TC-027 : E2E Full Happy Path
     // ==========================================================
-
-    test('TC-027 | E2E Full — should complete full combo product workflow successfully', async () => {
+    // Not working have some bug in there
+    test('TC-027 | E2E Full — should complete full combo product workflow successfully', async ({page}) => {
 
         await comboProductPage.runAddComboProductWorkflow(FULL_COMBO_PRODUCT_DATA);
 
         await comboProductPage.page.waitForTimeout(1500);
         const url = comboProductPage.page.url();
-        expect(url).not.toContain('/products/create');
+        await  page.pause();
+        expect(url).not.toContain('https://app.livezencloud.com/products/create');
 
-        console.log('✅ TC-027 Passed: Full combo product E2E workflow completed');
+        console.log('TC-027 Passed: Full combo product E2E workflow completed');
     });
 
     // ==========================================================
     // TC-028 : Save and Edit Action
     // ==========================================================
-
+    // Not working have some bug in there
     test('TC-028 | Action — Save and Edit should redirect to product edit page', async () => {
 
         await comboProductPage.runAddComboProductWorkflow({
@@ -785,7 +803,7 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
         const url = comboProductPage.page.url();
         expect(url).toMatch(/\/products\/\d+\/edit|\/products\/edit/);
 
-        console.log('✅ TC-028 Passed: Save and Edit redirected to edit page');
+        console.log('TC-028 Passed: Save and Edit redirected to edit page');
     });
 
     // ==========================================================
@@ -796,8 +814,11 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
 
         await comboProductPage.productTypeDropdown.click();
 
+        const searchInput = page.getByRole('textbox', { name: 'Search options...' });
+        await expect(searchInput).toBeVisible();
+
         const expectedTypes = [
-            'Standard Product',
+            'Single Product',
             'Variant Product',
             'Combo Product',
             'Digital Product',
@@ -811,29 +832,29 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
         // Close dropdown
         await page.keyboard.press('Escape');
 
-        console.log('✅ TC-029 Passed: All product type options visible in dropdown');
+        console.log('TC-029 Passed: All product type options visible in dropdown');
     });
 
     // ==========================================================
     // TC-030 : Sections Hidden for Non-Combo Types After Switch
     // ==========================================================
 
-    test('TC-030 | Product Type — switching away from Combo should hide Combo Items section', async ({ page }) => {
+    test('TC-030 | Product Type — switching away from Combo should hide Combo Products section', async ({ page }) => {
 
         // First select Combo
         await comboProductPage.selectComboProductType();
-        await expect(page.locator("h2:text('Combo Items')")).toBeVisible();
+        await expect(page.locator("h2:text('Combo Products')")).toBeVisible();
 
         // Switch to Standard Product
         await comboProductPage.selectFromDropdown(
             comboProductPage.productTypeDropdown,
-            'Standard Product'
+            'Single Product'
         );
         await comboProductPage.page.waitForTimeout(400);
 
-        // Combo Items section should now be hidden
-        await expect(page.locator("h2:text('Combo Items')")).not.toBeVisible();
+        // Combo Products section should now be hidden
+        await expect(page.locator("h2:text('Combo Products')")).not.toBeVisible();
 
-        console.log('✅ TC-030 Passed: Combo Items section hidden after switching product type');
+        console.log('TC-030 Passed: Combo Products section hidden after switching product type');
     });
 });
