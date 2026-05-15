@@ -497,7 +497,13 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
 
         await comboProductPage.selectComboProductType();
 
-        await expect(comboProductPage.page.locator("h2:text('Inventory')")).toBeVisible();
+        const inventoryHeading = comboProductPage.page.getByRole('heading', {
+            level: 2,
+            name: /^Inventory$/,
+        });
+
+        await inventoryHeading.scrollIntoViewIfNeeded();
+        await expect(inventoryHeading).toBeVisible();
 
         // Quantity
         await comboProductPage.quantityInput.fill('25');
@@ -506,9 +512,9 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
         // Inventory Mode dropdown
         await comboProductPage.selectFromDropdown(
             comboProductPage.inventoryModeDropdown,
-            'Track Bundle'
+            'Reserve from Components'
         );
-        await expect(comboProductPage.inventoryModeDropdown).toContainText('Track Bundle');
+        await expect(comboProductPage.inventoryModeDropdown).toContainText('Reserve from Components');
 
         // Bundle SKU
         await comboProductPage.bundleSkuInput.fill('BUNDLE-SKU-016');
@@ -556,9 +562,9 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
         // Bundle Type dropdown
         await comboProductPage.selectFromDropdown(
             comboProductPage.bundleTypeDropdown,
-            'Fixed Bundle'
+            'Fixed Price'
         );
-        await expect(comboProductPage.bundleTypeDropdown).toContainText('Fixed Bundle');
+        await expect(comboProductPage.bundleTypeDropdown).toContainText('Fixed Price');
 
         // Bundle Price
         await comboProductPage.bundlePriceInput.fill('350');
@@ -622,7 +628,7 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
 
         await expect(comboProductPage.productNameInput).toHaveValue('');
 
-        console.log('✅ TC-020 Passed: Reset button cleared the form');
+        console.log('TC-020 Passed: Reset button cleared the form');
     });
 
     // ==========================================================
@@ -639,7 +645,7 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
         // Page should stay on create — no redirect on validation failure
         await expect(comboProductPage.page).toHaveURL(/\/products\/create/);
 
-        console.log('✅ TC-021 Passed: Form blocked submission with empty required fields');
+        console.log('TC-021 Passed: Form blocked submission with empty required fields');
     });
 
     // ==========================================================
@@ -650,19 +656,22 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
 
         await comboProductPage.selectComboProductType();
 
-        await comboProductPage.productCostInput.fill('abc');
-        const costValue = await comboProductPage.productCostInput.inputValue();
-        expect(costValue).toBe('');
+        const initialCost = await comboProductPage.productCostInput.inputValue();
+        await comboProductPage.productCostInput.click();
+        await comboProductPage.page.keyboard.type('abc');
+        await expect(comboProductPage.productCostInput).toHaveValue(initialCost);
 
-        await comboProductPage.productPriceInput.fill('xyz');
-        const priceValue = await comboProductPage.productPriceInput.inputValue();
-        expect(priceValue).toBe('');
+        const initialPrice = await comboProductPage.productPriceInput.inputValue();
+        await comboProductPage.productPriceInput.click();
+        await comboProductPage.page.keyboard.type('xyz');
+        await expect(comboProductPage.productPriceInput).toHaveValue(initialPrice);
 
-        await comboProductPage.alertQuantityInput.fill('!@#');
-        const alertValue = await comboProductPage.alertQuantityInput.inputValue();
-        expect(alertValue).toBe('');
+        const initialAlert = await comboProductPage.alertQuantityInput.inputValue();
+        await comboProductPage.alertQuantityInput.click();
+        await comboProductPage.page.keyboard.type('!@#');
+        await expect(comboProductPage.alertQuantityInput).toHaveValue(initialAlert);
 
-        console.log('✅ TC-022 Passed: Numeric inputs rejected non-numeric values');
+        console.log('TC-022 Passed: Numeric inputs rejected non-numeric values');
     });
 
     // ==========================================================
