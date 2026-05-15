@@ -88,7 +88,7 @@ const MINIMAL_COMBO_PRODUCT_DATA: AddComboProductFormData = {
  * Single combo item data set
  */
 const SINGLE_COMBO_ITEM: ComboProductItem = {
-    productName: 'Product A',
+    productName: '24 Inch Monitor 55',
     quantity:    1,
 };
 
@@ -96,9 +96,9 @@ const SINGLE_COMBO_ITEM: ComboProductItem = {
  * Multiple combo items data set
  */
 const MULTIPLE_COMBO_ITEMS: ComboProductItem[] = [
-    { productName: 'Product A', quantity: 1 },
-    { productName: 'Product B', quantity: 2 },
-    { productName: 'Product C', quantity: 3 },
+    { productName: '24 Inch Monitor 55', quantity: 1 },
+    { productName: 'Vision Pro', quantity: 2 },
+    { productName: 'APL-IP15-S', quantity: 3 },
 ];
 
 // ============================================================
@@ -155,7 +155,7 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
         await comboProductPage.selectComboProductType();
 
         const comboSection = page.locator("h2:text('Combo Products')");
-        await page.pause();
+        
         await expect(comboSection).toBeVisible();
         
         console.log('TC-003 Passed: Combo Items section visible after type selection');
@@ -412,7 +412,7 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
     // TC-014 : Combo Items — Add Single Item
     // ==========================================================
 
-    test('TC-014 | Combo Products — should search and add a single product to combo list', async () => {
+    test('TC-014 | Combo Products — should search and add a single product to combo list', async ({page}) => {
 
         await comboProductPage.selectComboProductType();
 
@@ -437,8 +437,7 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
             "h2:text('Combo Products') ~ div table tbody tr:not(:has(td[colspan]))"
         );
         await expect(tableRows).toHaveCount(1);
-        await expect(tableRows.first()).toContainText(SINGLE_COMBO_ITEM.productName);
-
+        await expect(tableRows.first()).toContainText(SINGLE_COMBO_ITEM.productName);        
         console.log('TC-014 Passed: Single combo product searched, added & verified in table');
     });
 
@@ -472,7 +471,7 @@ test.describe('Add Combo Product — Full Coverage Test Suite', () => {
                     "h2:text('Combo Products') ~ div table tbody tr:not(:has(td[colspan]))"
                 );
                 const lastRow    = rows.last();
-                const plusButton = lastRow.locator('button:has-text("+")');
+                const plusButton = lastRow.locator('button[aria-label^="Increase quantity"]');
 
                 for (let c = 0; c < item.quantity - 1; c++) {
                     await plusButton.click();
