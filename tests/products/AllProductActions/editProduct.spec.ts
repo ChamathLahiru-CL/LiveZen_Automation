@@ -1,7 +1,7 @@
-import { test, expect } from '../fixtures';
+import { test, expect } from '../../fixtures';
 import EditProductPage, {
     type EditProductFormData,
-} from '../../pages/product/Actions/EditProductPage';
+} from '../../../pages/product/Actions/EditProductPage';
 
 // ============================================================
 // TEST CONSTANTS

@@ -1,6 +1,6 @@
-import { test, expect } from '../fixtures';
-import EditProductPage from '../../pages/product/Actions/EditProductPage';
-import { ViewProductPage } from '../../pages/product/Actions/ViewProductPage';
+import { test, expect } from '../../fixtures';
+import EditProductPage from '../../../pages/product/Actions/EditProductPage';
+import { ViewProductPage } from '../../../pages/product/Actions/ViewProductPage';
 
 test.describe('Product Editing Workflow', () => {
 
