@@ -27,17 +27,30 @@ test.describe('Product Editing Workflow', () => {
     });
 
     test('change the product name and verify the update', async ({ page }) => {
-        const targetProductId = 'PROD00053';   
-        const newProductName = 'Check AfterUpdate';
+
+        
+        const targetProductId = 'PROD00057';   
+        const newProductName = 'Check 25-09-2024';
 
         await editPage.selectProductToEdit(targetProductId);
+
+        //Update the product name
         await editPage.productNameInput.fill(newProductName);
+
+        // Save the changes
         await editPage.updateProduct();
-        await editPage.waitForConfirmUpdateDialog();
-        // await editPage.assertConfirmUpdateDialog();
-        await editPage.confirmUpdate();
-        // Verify the update by checking the product name on the edit page
+        await editPage.waitForConfirmUpdateDialog();        
+        await editPage.confirmUpdate();        
+
+        // Verify the updated product details in the view modal
+        await viewPage.selectProductToView(targetProductId);
         
+        // Wait for the modal to be visible and assert the updated details
+        await viewPage.waitForModalToBeVisible();
+
+        // Assert that the product ID and name are updated correctly
+        await viewPage.assertProductId(targetProductId);
+        await viewPage.assertProductName(newProductName);
         
     });
 });

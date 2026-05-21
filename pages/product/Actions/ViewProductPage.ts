@@ -3,6 +3,10 @@ import { Page, Locator, expect } from '@playwright/test';
 export class ViewProductPage {
   readonly page: Page;
 
+  // ── Action button and Edit options
+  readonly searchInput:       Locator;
+  readonly viewActionsButton: Locator;
+
   // Modal container
   readonly modal: Locator;
   readonly modalTitle: Locator;
@@ -91,6 +95,10 @@ export class ViewProductPage {
 
   constructor(page: Page) {
     this.page = page;
+
+    // Action button and Edit options
+    this.searchInput       = page.getByRole('textbox', { name: 'Search products...' });
+    this.viewActionsButton = page.getByRole('button').filter({ hasText: /^$/ });
 
     // Modal container
     this.modal = page.locator('[role="dialog"]');
@@ -261,6 +269,12 @@ export class ViewProductPage {
   }
 
   // ─── Actions ─────────────────────────────────────────────────────────────────
+  async selectProductToView(productId: string): Promise<void> {
+    await this.searchInput.fill(productId);
+    await this.viewActionsButton.click();
+    const viewOption = this.page.getByRole('button', { name: 'View' });
+    await viewOption.click();
+  }
 
   /**
    * Wait for the Product Overview modal to be visible
