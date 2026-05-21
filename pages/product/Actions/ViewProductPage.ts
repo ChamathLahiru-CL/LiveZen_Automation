@@ -597,4 +597,174 @@ export class ViewProductPage {
     await expect(this.metaDataTab).toBeVisible();
     await expect(this.typeDataTab).toBeVisible();
   }
+
+  // ─── Get All Product Details ──────────────────────────────────────────────────
+
+  /**
+   * Reads every visible field from the Product Overview modal and returns
+   * them as a plain object.
+   *
+   * Usage:
+   *   const details = await viewProductPage.getAllProductDetails();
+   *   console.log(details.productId);   // "PROD00162"
+   *   console.log(details.status);      // "Active"
+   *
+   * Notes:
+   *  - All values are returned as trimmed strings.
+   *  - Fields that are empty or not rendered return an empty string "".
+   *  - imageName is the text label displayed below the product image.
+   *  - productDescriptionInvoice and productDescription are the inner text
+   *    of the rendered HTML description blocks (prose content).
+   */
+  async getAllProductDetails(): Promise<{
+    imageName:                   string;
+    productId:                   string;
+    productType:                 string;
+    name:                        string;
+    secondaryName:               string;
+    slug:                        string;
+    barcodeSymbology:            string;
+    brand:                       string;
+    category:                    string;
+    productTax:                  string;
+    productCost:                 string;
+    productPrice:                string;
+    productUnit:                 string;
+    defaultSaleUnit:             string;
+    defaultPurchaseUnit:         string;
+    alertQuantity:               string;
+    status:                      string;
+    webVisibility:               string;
+    posVisibility:               string;
+    tags:                        string;
+    productDescriptionInvoice:   string;
+    productDescription:          string;
+    createdDate:                 string;
+    updatedDate:                 string;
+  }> {
+    // ── Ensure modal is visible before reading ──────────────────
+    await this.waitForModalToBeVisible();
+
+    // ── Helper: safely read text, returns "" if locator has no content ──
+    const safeText = async (locator: Locator): Promise<string> => {
+      try {
+        const text = await locator.innerText({ timeout: 3000 });
+        return text.trim();
+      } catch {
+        return '';
+      }
+    };
+
+    // ── Read all fields in parallel for speed ──────────────────
+    const [
+      imageName,
+      productId,
+      productType,
+      name,
+      secondaryName,
+      slug,
+      barcodeSymbology,
+      brand,
+      category,
+      productTax,
+      productCost,
+      productPrice,
+      productUnit,
+      defaultSaleUnit,
+      defaultPurchaseUnit,
+      alertQuantity,
+      status,
+      webVisibility,
+      posVisibility,
+      tags,
+      productDescriptionInvoice,
+      productDescription,
+      createdDate,
+      updatedDate,
+    ] = await Promise.all([
+      safeText(this.productImageName),
+      safeText(this.productIdValue),
+      safeText(this.productTypeValue),
+      safeText(this.nameValue),
+      safeText(this.secondaryNameValue),
+      safeText(this.slugValue),
+      safeText(this.barcodeSymbologyValue),
+      safeText(this.brandValue),
+      safeText(this.categoryValue),
+      safeText(this.productTaxValue),
+      safeText(this.productCostValue),
+      safeText(this.productPriceValue),
+      safeText(this.productUnitValue),
+      safeText(this.defaultSaleUnitValue),
+      safeText(this.defaultPurchaseUnitValue),
+      safeText(this.alertQuantityValue),
+      safeText(this.statusValue),
+      safeText(this.webVisibilityValue),
+      safeText(this.posVisibilityValue),
+      safeText(this.tagsValue),
+      safeText(this.productDescriptionInvoiceValue),
+      safeText(this.productDescriptionValue),
+      safeText(this.createdDateValue),
+      safeText(this.updatedDateValue),
+    ]);
+
+    const details = {
+      imageName,
+      productId,
+      productType,
+      name,
+      secondaryName,
+      slug,
+      barcodeSymbology,
+      brand,
+      category,
+      productTax,
+      productCost,
+      productPrice,
+      productUnit,
+      defaultSaleUnit,
+      defaultPurchaseUnit,
+      alertQuantity,
+      status,
+      webVisibility,
+      posVisibility,
+      tags,
+      productDescriptionInvoice,
+      productDescription,
+      createdDate,
+      updatedDate,
+    };
+
+    // ── Log to console for easy debugging ──────────────────────
+    console.log('\n══════════════════════════════════════════════════');
+    console.log('📦 Product Overview — All Details');
+    console.log('══════════════════════════════════════════════════');
+    console.log(`  🖼️  Image Name                  : ${details.imageName}`);
+    console.log(`  🆔  Product ID                  : ${details.productId}`);
+    console.log(`  📦  Product Type                : ${details.productType}`);
+    console.log(`  🏷️  Name                        : ${details.name}`);
+    console.log(`  🏷️  Secondary Name              : ${details.secondaryName}`);
+    console.log(`  🔗  Slug                        : ${details.slug}`);
+    console.log(`  📊  Barcode Symbology           : ${details.barcodeSymbology}`);
+    console.log(`  🏢  Brand                       : ${details.brand}`);
+    console.log(`  📁  Category                    : ${details.category}`);
+    console.log(`  🧾  Product Tax                 : ${details.productTax}`);
+    console.log(`  💵  Product Cost                : ${details.productCost}`);
+    console.log(`  💰  Product Price               : ${details.productPrice}`);
+    console.log(`  📏  Product Unit                : ${details.productUnit}`);
+    console.log(`  🛒  Default Sale Unit           : ${details.defaultSaleUnit}`);
+    console.log(`  📦  Default Purchase Unit       : ${details.defaultPurchaseUnit}`);
+    console.log(`  ⚠️  Alert Quantity              : ${details.alertQuantity}`);
+    console.log(`  ✅  Status                      : ${details.status}`);
+    console.log(`  🌐  Web Visibility              : ${details.webVisibility}`);
+    console.log(`  🖥️  POS Visibility              : ${details.posVisibility}`);
+    console.log(`  🏷️  Tags                        : ${details.tags}`);
+    console.log(`  📄  Description (Invoice)       : ${details.productDescriptionInvoice}`);
+    console.log(`  📝  Description                 : ${details.productDescription}`);
+    console.log(`  📅  Created Date                : ${details.createdDate}`);
+    console.log(`  📅  Updated Date                : ${details.updatedDate}`);
+    console.log('══════════════════════════════════════════════════\n');
+
+    return details;
+  }
 }

@@ -6,6 +6,7 @@ test.describe('Product Editing Workflow', () => {
 
     let editPage: EditProductPage;
     let viewPage: ViewProductPage;
+    
 
     test.beforeEach(async ({loggedIn, page }) => {
         editPage = new EditProductPage(page);
@@ -55,6 +56,16 @@ test.describe('Product Editing Workflow', () => {
         await viewPage.assertProductId(targetProductId);
         await viewPage.assertProductName(newProductName);
 
+        // Open the view modal first, then:
+        const details = await viewPage.getAllProductDetails();
+
+        // // Use individual fields
+        // expect(details.productId).toBe('PROD00162');
+        // expect(details.status).toBe('Active');
+        // expect(details.brand).toBe('ABCD');
+
+        // Or pass directly into assertGeneralProductDetails
+        await viewPage.assertGeneralProductDetails(details);
         //close the modal after verification
         await viewPage.closeModal();
 
