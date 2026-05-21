@@ -97,8 +97,10 @@ export class ViewProductPage {
     this.page = page;
 
     // Action button and Edit options
-    this.searchInput       = page.getByRole('textbox', { name: 'Search products...' });
-    this.viewActionsButton = page.getByRole('button').filter({ hasText: /^$/ });
+    this.searchInput = page.getByRole('textbox', { name: 'Search products...' });
+    // The actions button contains an ellipsis SVG with class "lucide-ellipsis" and no text,
+    // so locate the button by the contained SVG for a reliable selector.
+    this.viewActionsButton = page.locator('button:has(svg.lucide-ellipsis)');
 
     // Modal container
     this.modal = page.locator('[role="dialog"]');
