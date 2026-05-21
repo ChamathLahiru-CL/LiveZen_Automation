@@ -29,8 +29,8 @@ test.describe('Product Editing Workflow', () => {
     test('change the product name and verify the update', async ({ page }) => {
 
         
-        const targetProductId = 'PROD00057';   
-        const newProductName = 'Check 25-09-2024';
+        const targetProductId = 'PROD00035';   
+        const newProductName = 'New Updated Product Name';
 
         await editPage.selectProductToEdit(targetProductId);
 
@@ -40,7 +40,10 @@ test.describe('Product Editing Workflow', () => {
         // Save the changes
         await editPage.updateProduct();
         await editPage.waitForConfirmUpdateDialog();        
-        await editPage.confirmUpdate();        
+        await editPage.confirmUpdate();  
+
+        // await page.pause(); // Wait for the update to process and reflect in the UI       
+        
 
         // Verify the updated product details in the view modal
         await viewPage.selectProductToView(targetProductId);
@@ -51,6 +54,9 @@ test.describe('Product Editing Workflow', () => {
         // Assert that the product ID and name are updated correctly
         await viewPage.assertProductId(targetProductId);
         await viewPage.assertProductName(newProductName);
-        
+
+        //close the modal after verification
+        await viewPage.closeModal();
+
     });
 });
