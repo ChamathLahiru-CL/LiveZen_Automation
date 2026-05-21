@@ -737,7 +737,7 @@ export class ViewProductPage {
 
     // ── Log to console for easy debugging ──────────────────────
     console.log('\n══════════════════════════════════════════════════');
-    console.log('📦 Product Overview — All Details');
+    console.log('Product Overview — All Details');
     console.log('══════════════════════════════════════════════════');
     console.log(`  Image Name                  : ${details.imageName}`);
     console.log(`  Product ID                  : ${details.productId}`);

@@ -338,7 +338,7 @@ export default class EditProductPage {
         await expect(this.confirmUpdateDialog).toBeVisible({ timeout: 5000 });
         await expect(this.confirmUpdateDialogTitle).toBeVisible();
         await expect(this.confirmUpdateDialogText).toBeVisible();
-        console.log('   🟡 Confirm Update dialog appeared');
+        console.log('   Confirm Update dialog appeared');
     }
 
     /**
@@ -353,7 +353,7 @@ export default class EditProductPage {
         await expect(this.confirmUpdateButton).toBeVisible();
         await expect(this.confirmCancelButton).toBeVisible();
         await expect(this.confirmUpdateCloseButton).toBeVisible();
-        console.log('   ✅ Confirm Update dialog content verified');
+        console.log('   Confirm Update dialog content verified');
     }
 
     /**
@@ -364,7 +364,7 @@ export default class EditProductPage {
         await this.confirmUpdateButton.click();
         // Wait for dialog to disappear after confirmation
         await expect(this.confirmUpdateDialog).toBeHidden({ timeout: 5000 });
-        console.log('   ✅ Update confirmed via dialog');
+        console.log('   Update confirmed via dialog');
     }
 
     /**
@@ -375,7 +375,7 @@ export default class EditProductPage {
         await this.confirmCancelButton.click();
         // Wait for dialog to disappear after cancellation
         await expect(this.confirmUpdateDialog).toBeHidden({ timeout: 5000 });
-        console.log('   ↩️  Update cancelled via dialog Cancel button');
+        console.log('   Update cancelled via dialog Cancel button');
     }
 
     /**
@@ -386,7 +386,7 @@ export default class EditProductPage {
         await this.confirmUpdateCloseButton.click();
         // Wait for dialog to disappear
         await expect(this.confirmUpdateDialog).toBeHidden({ timeout: 5000 });
-        console.log('   ↩️  Confirm Update dialog closed via X button');
+        console.log('   Confirm Update dialog closed via X button');
     }
 
     // ============================================================
@@ -450,7 +450,7 @@ export default class EditProductPage {
             await expect(this.statusDropdown).toContainText(data.status);
         }
 
-        console.log('   ✅ General Information updated & verified');
+        console.log('   General Information updated & verified');
     }
 
     // ── Descriptions ─────────────────────────────────────────
@@ -472,7 +472,7 @@ export default class EditProductPage {
             await expect(this.invoiceDescriptionEditor).toContainText(data.invoiceDescription);
         }
 
-        console.log('   ✅ Descriptions updated & verified');
+        console.log('   Descriptions updated & verified');
     }
 
     // ── Media ─────────────────────────────────────────────────
@@ -487,7 +487,7 @@ export default class EditProductPage {
             if (await deleteBtn.isVisible()) {
                 await deleteBtn.click();
                 await this.page.waitForTimeout(500);
-                console.log('   🗑️  Existing product image deleted');
+                console.log('   Existing product image deleted');
             }
         }
 
@@ -504,7 +504,7 @@ export default class EditProductPage {
             await this.page.waitForTimeout(500);
         }
 
-        console.log('   ✅ Media section handled');
+        console.log('   Media section handled');
     }
 
     // ── Pricing & Inventory ───────────────────────────────────
@@ -549,7 +549,7 @@ export default class EditProductPage {
             await expect(this.alertQuantityInput).toHaveValue(data.alertQuantity);
         }
 
-        console.log('   ✅ Pricing & Inventory updated & verified');
+        console.log('   Pricing & Inventory updated & verified');
     }
 
     // ── Visibility ────────────────────────────────────────────
@@ -568,7 +568,7 @@ export default class EditProductPage {
             expect(state).toBe(String(data.posVisibility));
         }
 
-        console.log('   ✅ Visibility updated & verified');
+        console.log('   Visibility updated & verified');
     }
 
     // ============================================================
@@ -617,7 +617,7 @@ export default class EditProductPage {
     }
 
     // ============================================================
-    // 🚀 MASTER END-TO-END WORKFLOW METHOD
+    // MASTER END-TO-END WORKFLOW METHOD
     // ============================================================
 
     /**
@@ -636,45 +636,45 @@ export default class EditProductPage {
     async runEditProductWorkflow(data: EditProductFormData): Promise<void> {
 
         console.log('\n══════════════════════════════════════════════════');
-        console.log('🚀 START: Edit Product E2E Workflow');
+        console.log('START: Edit Product E2E Workflow');
         console.log('══════════════════════════════════════════════════\n');
 
-        console.log('🔍 Verifying edit page loaded...');
+        console.log('Verifying edit page loaded...');
         await this.verifyPageLoaded();
 
         // Always start from General tab
-        console.log('🗂️  Activating General tab...');
+        console.log('Activating General tab...');
         await this.clickGeneralTab();
 
-        console.log('📋 Step 1/5 → General Information');
+        console.log('Step 1/5 -> General Information');
         await this.fillGeneralInformation(data);
 
-        console.log('📝 Step 2/5 → Descriptions');
+        console.log('Step 2/5 -> Descriptions');
         await this.fillDescriptions(data);
 
-        console.log('🖼️  Step 3/5 → Media');
+        console.log('Step 3/5 -> Media');
         await this.fillMedia(data);
 
-        console.log('💰 Step 4/5 → Pricing & Inventory');
+        console.log('Step 4/5 -> Pricing & Inventory');
         await this.fillPricingAndInventory(data);
 
-        console.log('👁️  Step 5/5 → Visibility');
+        console.log('Step 5/5 -> Visibility');
         await this.fillVisibility(data);
 
-        console.log('\n💾 Submitting...');
+        console.log('\nSubmitting...');
 
         if (data.action === 'reset') {
             await this.resetForm();
-            console.log('   ↩️  Form reset');
+            console.log('   Form reset');
         } else {
             // Click Update → handle Confirm Update dialog
             await this.updateProduct();
-            console.log('   🟡 Confirm Update dialog triggered');
+            console.log('   Confirm Update dialog triggered');
             await this.confirmUpdate();
         }
 
         console.log('\n══════════════════════════════════════════════════');
-        console.log('🎉 DONE: Edit Product E2E Workflow Completed!');
+        console.log('DONE: Edit Product E2E Workflow Completed!');
         console.log('══════════════════════════════════════════════════\n');
     }
 }

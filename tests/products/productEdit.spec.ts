@@ -30,8 +30,8 @@ test.describe('Product Editing Workflow', () => {
     test('change the product name and verify the update', async ({ page }) => {
 
         
-        const targetProductId = 'PROD00035';   
-        const newProductName = 'New Updated Product Name';
+        const targetProductId = 'PROD00032';   
+        const newProductName = 'LiveZen Product 32 - Updated';
 
         await editPage.selectProductToEdit(targetProductId);
 
