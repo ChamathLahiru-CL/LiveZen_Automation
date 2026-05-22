@@ -114,9 +114,9 @@ test.describe('Product Editing Workflow', () => {
         await viewPage.assertProductId(targetProductId);
         await viewPage.assertProductName(newProductName);
 
-        console.log(`══════════════════════════════════════════════════
-        Check details before re-login:
-        ══════════════════════════════════════════════════ `);
+        console.log("══════════════════════════════════════════════════");
+        console.log("Check details before re-login:");
+        console.log("══════════════════════════════════════════════════");
 
         // Open the view modal first, then:
         const details = await viewPage.getAllProductDetails();
@@ -148,9 +148,9 @@ test.describe('Product Editing Workflow', () => {
         await viewPage.assertProductId(targetProductId);
         await viewPage.assertProductName(newProductName);
 
-        console.log(`══════════════════════════════════════════════════
-        Check details after re-login:
-        ══════════════════════════════════════════════════ `);
+        console.log("══════════════════════════════════════════════════");
+        console.log("Check details after re-login:");
+        console.log("══════════════════════════════════════════════════");
         // Open the view modal first, then:
         const details1 = await viewPage.getAllProductDetails();
 
