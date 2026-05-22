@@ -150,4 +150,10 @@ export default class Topbar {
         await this.profileButton.click();
         await this.logoutButton.click();
     }
+
+    async logoutAccount() {
+        await this.profileButton.click();
+        await this.logoutButton.click();
+    }
+
 }

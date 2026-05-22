@@ -273,7 +273,7 @@ export class ViewProductPage {
   // ─── Actions ─────────────────────────────────────────────────────────────────
   async selectProductToView(productId: string): Promise<void> {
     await this.searchInput.fill(productId);
-    await this.viewActionsButton.click();
+    // await this.viewActionsButton.click();
     const productRow = this.page.locator('tr', { hasText: productId }).first();
     const rowActionBtn = productRow.locator('button:has(svg.lucide-ellipsis)').first();
     await rowActionBtn.click();
