@@ -297,7 +297,7 @@ export default class AddProductPage {
     }
 
     // ============================================================
-    // ✅ SECTION FILL METHODS
+    // SECTION FILL METHODS
     // ============================================================
 
     // ── Step 1 : General Information ─────────────────────────
@@ -374,7 +374,7 @@ export default class AddProductPage {
             await expect(this.statusDropdown).toContainText(data.status);
         }
 
-        console.log('   ✅ General Information filled & verified');
+        console.log('   General Information filled & verified');
     }
 
     // ── Step 2 : Descriptions ─────────────────────────────────
@@ -393,7 +393,7 @@ export default class AddProductPage {
             await expect(this.invoiceDescriptionEditor).toContainText(data.invoiceDescription);
         }
 
-        console.log('   ✅ Descriptions filled & verified');
+        console.log('   Descriptions filled & verified');
     }
 
     // ── Step 3 : Media ────────────────────────────────────────
@@ -414,7 +414,7 @@ export default class AddProductPage {
             await this.page.waitForTimeout(500);
         }
 
-        console.log('   ✅ Media section handled');
+        console.log('   Media section handled');
     }
 
     // ── Step 4 : Pricing & Inventory ─────────────────────────
@@ -456,7 +456,7 @@ export default class AddProductPage {
             await expect(this.alertQuantityInput).toHaveValue(data.alertQuantity);
         }
 
-        console.log('   ✅ Pricing & Inventory filled & verified');
+        console.log('   Pricing & Inventory filled & verified');
     }
 
     // ── Step 5 : Visibility ───────────────────────────────────
@@ -475,7 +475,7 @@ export default class AddProductPage {
             expect(state).toBe(String(data.posVisibility));
         }
 
-        console.log('   ✅ Visibility set & verified');
+        console.log('   Visibility set & verified');
     }
 
     // ── Step 6 : SEO ──────────────────────────────────────────
@@ -499,7 +499,7 @@ export default class AddProductPage {
             }
         }
 
-        console.log('   ✅ SEO filled & verified');
+        console.log('   SEO filled & verified');
     }
 
     // ── Step 7 : Variant Options ──────────────────────────────
@@ -547,10 +547,10 @@ export default class AddProductPage {
             await this.variantSKUInput.fill(data.sku);
             await expect(this.variantSKUInput).toHaveValue(data.sku);
 
-            console.log(`   ✅ Variant SKU filled: ${data.sku}`);
+            console.log(`   Variant SKU filled: ${data.sku}`);
         }
 
-        console.log('   ✅ Variant Options set & verified');
+        console.log('   Variant Options set & verified');
     }
 
     // ── Step 8 : Inventory ────────────────────────────────────
@@ -587,7 +587,7 @@ export default class AddProductPage {
             await expect(this.stockTrackingCheckbox).toBeChecked({ checked: data.stockTracking });
         }
 
-        console.log('   ✅ Inventory filled & verified');
+        console.log('   Inventory filled & verified');
     }
 
     // ── Step 9 : Shipping ─────────────────────────────────────
@@ -628,7 +628,7 @@ export default class AddProductPage {
             await expect(this.fulfillmentLocationDropdown).toContainText(data.fulfillmentLocation);
         }
 
-        console.log('   ✅ Shipping filled & verified');
+        console.log('   Shipping filled & verified');
     }
 
     // ── Step 10 : Tax Pricing ─────────────────────────────────
@@ -660,7 +660,7 @@ export default class AddProductPage {
             await expect(this.lowStockAlertInput).toHaveValue(data.lowStockAlert);
         }
 
-        console.log('   ✅ Tax Pricing filled & verified');
+        console.log('   Tax Pricing filled & verified');
     }
 
     // --Low stock update alert ------------------------------------
@@ -684,7 +684,7 @@ export default class AddProductPage {
     }
 
     // ============================================================
-    // 🚀 MASTER END-TO-END FORM WORKFLOW METHOD
+    // MASTER END-TO-END FORM WORKFLOW METHOD
     // ============================================================
 
     /**
@@ -697,44 +697,44 @@ export default class AddProductPage {
     async runAddProductWorkflow(data: AddProductFormData): Promise<void> {
 
         console.log('\n══════════════════════════════════════════════════');
-        console.log('🚀 START: Add Product E2E Workflow');
+        console.log('START: Add Product E2E Workflow');
         console.log('══════════════════════════════════════════════════\n');
 
-        console.log('📋 Step 1/10 → General Information');
+        console.log('Step 1/10 → General Information');
         await this.fillGeneralInformation(data);
 
-        console.log('📝 Step 2/10 → Descriptions');
+        console.log('Step 2/10 → Descriptions');
         await this.fillDescriptions(data);
 
-        console.log('🖼️  Step 3/10 → Media');
+        console.log('Step 3/10 → Media');
         await this.fillMedia(data);
 
-        console.log('💰 Step 4/10 → Pricing & Inventory');
+        console.log('Step 4/10 → Pricing & Inventory');
         await this.fillPricingAndInventory(data);
 
-        console.log('👁️  Step 5/10 → Visibility');
+        console.log('Step 5/10 → Visibility');
         await this.fillVisibility(data);
 
-        console.log('🔍 Step 6/10 → SEO');
+        console.log('Step 6/10 → SEO');
         await this.fillSEO(data);
 
-        console.log('🎛️  Step 7/10 → Variant Options');
+        console.log('Step 7/10 → Variant Options');
         await this.fillVariantOptions(data);
 
-        console.log('📦 Step 8/10 → Inventory');
+        console.log('Step 8/10 → Inventory');
         await this.fillInventory(data);
 
-        console.log('🚚 Step 9/10 → Shipping');
+        console.log('Step 9/10 → Shipping');
         await this.fillShipping(data);
 
-        console.log('🧾 Step 10/10 → Tax Pricing');
+        console.log('Step 10/10 → Tax Pricing');
         await this.fillTaxPricing(data);
 
-        console.log('\n💾 Submitting Form...');
+        console.log('\nSubmitting Form...');
         await this.save();
 
         console.log('\n══════════════════════════════════════════════════');
-        console.log('🎉 DONE: Add Product E2E Workflow Completed!');
+        console.log('DONE: Add Product E2E Workflow Completed!');
         console.log('══════════════════════════════════════════════════\n');
     }
 }

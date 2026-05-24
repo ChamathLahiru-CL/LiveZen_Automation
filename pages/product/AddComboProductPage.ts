@@ -388,7 +388,7 @@ private async fillGeneralInformation(data: AddComboProductFormData) {
         await expect(this.statusDropdown).toContainText(data.status);
     }
 
-    console.log('   ✅ General Information filled & verified');
+    console.log('   General Information filled & verified');
 }
 
     // ── Step 2 : Descriptions ─────────────────────────────────
@@ -407,7 +407,7 @@ private async fillGeneralInformation(data: AddComboProductFormData) {
             await expect(this.invoiceDescriptionEditor).toContainText(data.invoiceDescription);
         }
 
-        console.log('   ✅ Descriptions filled & verified');
+        console.log('   Descriptions filled & verified');
     }
 
     // ── Step 3 : Media ────────────────────────────────────────
@@ -428,7 +428,7 @@ private async fillGeneralInformation(data: AddComboProductFormData) {
             await this.page.waitForTimeout(500);
         }
 
-        console.log('   ✅ Media section handled');
+        console.log('   Media section handled');
     }
 
     // ── Step 4 : Pricing & Inventory ─────────────────────────
@@ -470,7 +470,7 @@ private async fillGeneralInformation(data: AddComboProductFormData) {
             await expect(this.alertQuantityInput).toHaveValue(data.alertQuantity);
         }
 
-        console.log('   ✅ Pricing & Inventory filled & verified');
+        console.log('   Pricing & Inventory filled & verified');
     }
 
     // ── Step 5 : Visibility ───────────────────────────────────
@@ -489,7 +489,7 @@ private async fillGeneralInformation(data: AddComboProductFormData) {
             expect(state).toBe(String(data.posVisibility));
         }
 
-        console.log('   ✅ Visibility set & verified');
+        console.log('   Visibility set & verified');
     }
 
     // ── Step 6 : SEO ──────────────────────────────────────────
@@ -513,7 +513,7 @@ private async fillGeneralInformation(data: AddComboProductFormData) {
             }
         }
 
-        console.log('   ✅ SEO filled & verified');
+        console.log('   SEO filled & verified');
     }
 
     // ── Step 7 : Combo Items ──────────────────────────────────
@@ -538,14 +538,14 @@ private async fillGeneralInformation(data: AddComboProductFormData) {
         ).toBeVisible();
 
         if (!data.comboItems || data.comboItems.length === 0) {
-            console.log('   ⚠️  No combo items provided — skipping Combo Products section');
+            console.log('   No combo items provided — skipping Combo Products section');
             return;
         }
 
         for (let i = 0; i < data.comboItems.length; i++) {
             const item = data.comboItems[i];
 
-            console.log(`   ➕ Adding combo item ${i + 1}: "${item.productName}"`);
+            console.log(`   Adding combo item ${i + 1}: "${item.productName}"`);
 
             // Type in the search input
             await this.comboProductSearchInput.click();
@@ -579,7 +579,7 @@ private async fillGeneralInformation(data: AddComboProductFormData) {
 
                 // Verify quantity stepper display value
                 const stepperInput = lastRow.locator('input[type="number"], span.quantity-display, td:nth-child(4)');
-                console.log(`      ✅ Quantity set to ${item.quantity} for "${item.productName}"`);
+                console.log(`      Quantity set to ${item.quantity} for "${item.productName}"`);
             }
         }
 
@@ -589,7 +589,7 @@ private async fillGeneralInformation(data: AddComboProductFormData) {
         );
         await expect(tableRows).toHaveCount(data.comboItems.length);
 
-        console.log(`   ✅ Combo Products filled — ${data.comboItems.length} item(s) added`);
+        console.log(`   Combo Products filled — ${data.comboItems.length} item(s) added`);
     }
 
      // ── Step 8 : Bundle Composition ──────────────────────────
@@ -621,7 +621,7 @@ private async fillGeneralInformation(data: AddComboProductFormData) {
             });
         }
 
-        console.log('   ✅ Bundle Composition filled & verified');
+        console.log('   Bundle Composition filled & verified');
     }
 
     // ── Step 9 : Inventory (Combo-specific) ───────────────────
@@ -659,7 +659,7 @@ private async fillGeneralInformation(data: AddComboProductFormData) {
             });
         }
 
-        console.log('   ✅ Inventory filled & verified');
+        console.log('   Inventory filled & verified');
     }
 
     // ── Step 10 : Tax Pricing (Combo-specific) ────────────────
@@ -688,7 +688,7 @@ private async fillGeneralInformation(data: AddComboProductFormData) {
             });
         }
 
-        console.log('   ✅ Tax Pricing filled & verified');
+        console.log('   Tax Pricing filled & verified');
     }
 
 
@@ -709,7 +709,7 @@ private async fillGeneralInformation(data: AddComboProductFormData) {
     }
 
     // ============================================================
-    // 🚀 MASTER END-TO-END WORKFLOW METHOD
+    // MASTER END-TO-END WORKFLOW METHOD
     // ============================================================
 
     /**
@@ -728,46 +728,46 @@ private async fillGeneralInformation(data: AddComboProductFormData) {
     async runAddComboProductWorkflow(data: AddComboProductFormData): Promise<void> {
 
         console.log('\n══════════════════════════════════════════════════');
-        console.log('🚀 START: Add Combo Product E2E Workflow');
+        console.log('START: Add Combo Product E2E Workflow');
         console.log('══════════════════════════════════════════════════\n');
 
-        console.log('🔍 Verifying page loaded correctly...');
+        console.log('Verifying page loaded correctly...');
         await this.verifyPageLoaded();
 
-        console.log('🎯 Selecting Combo Product Type...');
+        console.log('Selecting Combo Product Type...');
         await this.selectComboProductType();
 
-        console.log('📋 Step 1/10 → General Information');
+        console.log('Step 1/10 → General Information');
         await this.fillGeneralInformation(data);
 
-        console.log('📝 Step 2/10 → Descriptions');
+        console.log('Step 2/10 → Descriptions');
         await this.fillDescriptions(data);
 
-        console.log('🖼️  Step 3/10 → Media');
+        console.log('Step 3/10 → Media');
         await this.fillMedia(data);
 
-        console.log('💰 Step 4/10 → Pricing & Inventory');
+        console.log('Step 4/10 → Pricing & Inventory');
         await this.fillPricingAndInventory(data);
 
-        console.log('👁️  Step 5/10 → Visibility');
+        console.log('Step 5/10 → Visibility');
         await this.fillVisibility(data);
 
-        console.log('🔍 Step 6/10 → SEO');
+        console.log('Step 6/10 → SEO');
         await this.fillSEO(data);
 
-        console.log('🔗 Step 7/10 → Combo Products');
+        console.log('Step 7/10 → Combo Products');
         await this.fillComboProducts(data);
 
-        console.log('📦 Step 8/10 → Bundle Composition');
+        console.log('Step 8/10 → Bundle Composition');
         await this.fillBundleComposition(data);
 
-        console.log('🗃️  Step 9/10 → Inventory');
+        console.log('Step 9/10 → Inventory');
         await this.fillInventory(data);
 
-        console.log('🧾 Step 10/10 → Tax Pricing');
+        console.log('Step 10/10 → Tax Pricing');
         await this.fillTaxPricing(data);
 
-        console.log('\n💾 Submitting Form...');
+        console.log('\nSubmitting Form...');
 
         switch (data.action) {
             case 'saveAndEdit':
@@ -783,7 +783,7 @@ private async fillGeneralInformation(data: AddComboProductFormData) {
         }
 
         console.log('\n══════════════════════════════════════════════════');
-        console.log('🎉 DONE: Add Combo Product E2E Workflow Completed!');
+        console.log('DONE: Add Combo Product E2E Workflow Completed!');
         console.log('══════════════════════════════════════════════════\n');
     }
 }
